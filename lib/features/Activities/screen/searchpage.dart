@@ -76,7 +76,7 @@ class _SearchPageState extends State<SearchPage> {
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, // 2 items per row
-                  childAspectRatio: 1.5, // Adjust this to make boxes shorter
+                  childAspectRatio: 1.8, // Adjust this to make boxes shorter
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 8,
                 ),

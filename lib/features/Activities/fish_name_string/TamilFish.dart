@@ -11,12 +11,29 @@ class TamilFish {
 
 List<TamilFish> fishList = [
   TamilFish(
-      localName: 'Vilai Meen',
-      scientificName: 'Lutjanus campechanus',
-      imagePath: 'assets/images/Salmon.png'),
+      localName: 'Sura Meen',
+      scientificName: 'Carcharhinus amblyrhynchos',
+      imagePath: 'assets/images/Carcharhinus amblyrhynchos.png'),
   TamilFish(
-      localName: 'Vanjaram',
-      scientificName: 'Scomberomorus guttatus',
-      imagePath: 'assets/images/Tuna.png'),
-  // Add more fish here...
+      localName: 'Kuthiparava Meen',
+      scientificName: 'Katsuwonus pelamis',
+      imagePath: 'assets/images/Katsuwonus pelamis.png'),
+  TamilFish(
+      localName: 'Kanangeluthi',
+      scientificName: 'Rastrelliger kanagurta',
+      imagePath: 'assets/images/Rastrelliger kanagurta.png'),
+  TamilFish(
+      localName: 'Mathi Meen',
+      scientificName: 'Sardinella longiceps',
+      imagePath: 'assets/images/Sardinella longiceps.png'),
+  TamilFish(
+      localName: 'Vanjaram Meen',
+      scientificName: 'Scomberomorus commerson',
+      imagePath: 'assets/images/Scomberomorus Commerson.png'),
+  TamilFish(
+      localName: 'Ooli Meen',
+      scientificName: 'Sphyraena chrysotaenia',
+      imagePath: 'assets/images/Sphyraena chrysotaenia.png'),
 ];
+
+  // Add more fish here...
