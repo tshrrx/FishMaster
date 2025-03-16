@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:fishmaster/features/Activities/screen/homepage.dart';
-import 'package:fishmaster/features/Activities/screen/mappage.dart';
 import 'package:fishmaster/features/Activities/screen/profile.dart';
 import 'package:fishmaster/features/Activities/screen/searchPage.dart';
 
@@ -15,15 +13,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [Homepage(), SearchPage(), Map(), Profile()];
-
-  // Define the navigation destinations
-  final List<NavigationDestination> destinations = [
-    NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-    NavigationDestination(icon: Icon(Icons.search), label: 'Search'),
-    NavigationDestination(icon: Icon(Icons.map), label: 'Map'),
-    NavigationDestination(icon: Icon(Icons.person), label: 'Profile'),
-  ];
+  final List<Widget> _pages = [Homepage(), SearchPage(), Profile()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -44,16 +34,32 @@ class _HomeScreenState extends State<HomeScreen> {
             topRight: Radius.circular(30.0),
           ),
           child: SizedBox(
-            height: 90,
+            height: 60, // Reduced height slightly
             child: NavigationBar(
               selectedIndex: _selectedIndex,
+              indicatorColor: Color.fromRGBO(51, 108, 138, 1),
               onDestinationSelected: _onItemTapped,
               backgroundColor: Colors.white,
-              destinations: destinations,
+              destinations: [
+                _buildNavItem(Icons.home, "Home", 0),
+                _buildNavItem(Icons.search, "Search", 1),
+                _buildNavItem(Icons.person, "Profile", 2),
+              ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  NavigationDestination _buildNavItem(IconData icon, String label, int index) {
+    return NavigationDestination(
+      icon: Icon(
+        icon,
+        color: _selectedIndex == index ? Colors.white : Colors.black,
+        size: 22, // Reduced icon size
+      ),
+      label: label,
     );
   }
 }
