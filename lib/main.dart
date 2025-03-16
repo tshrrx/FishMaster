@@ -3,6 +3,9 @@ import 'package:fishmaster/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fishmaster/features/authentication/screens/login/login.dart';
 import 'package:get/get.dart'; // Import GetX
+import 'package:fishmaster/features/authentication/screens/signup/otp.dart';
+import 'package:fishmaster/features/Activities/controller/homescreen.dart';
+
 
 void main() {
   runApp(const App());
@@ -23,6 +26,8 @@ class App extends StatelessWidget {
       getPages: [
         GetPage(name: '/', page: () => const LoginScreen()),
         GetPage(name: '/signup', page: () => const SignupScreen()),
+        GetPage(name: '/otp', page: () => const OTPVerificationScreen()),
+        GetPage(name: '/homescreen', page: () => const HomeScreen()),
       ],
     );
   }

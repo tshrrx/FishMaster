@@ -13,7 +13,9 @@ dependencies:
     sdk: flutter
   iconsax: ^0.0.8
   cupertino_icons: ^1.0.8
+  carousel_slider: ^5.0.0
   get:
+
 
 dev_dependencies:
   flutter_test:
@@ -23,11 +25,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
   assets:
-    - assets/logos/
-    - assets/icons/
-    - assets/images/
+      - assets/logos/
+      - assets/icons/
+      - assets/images/
+ 
 
   fonts:
     - family: Poppins

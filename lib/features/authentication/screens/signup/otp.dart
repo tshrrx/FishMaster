@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:get/get.dart';
 import 'package:fishmaster/utils/constants/sizes.dart';
+import 'package:fishmaster/features/Activities/controller/homescreen.dart';
+
 
 class OTPVerificationScreen extends StatefulWidget {
   const OTPVerificationScreen({super.key});
@@ -118,7 +120,9 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(() => const HomeScreen());
+                  },
                   child: const Text("Verify OTP"),
                 ),
               ),
