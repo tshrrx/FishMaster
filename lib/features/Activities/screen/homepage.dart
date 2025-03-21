@@ -1,6 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:fishmaster/features/Activities/screen/searchPage.dart'; // Import Search Page
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:intl/intl.dart';
+import 'package:location/location.dart';
+import 'package:untitledwdjwhjhhiwaih/features/Activities/screen/searchPage.dart';
+
+class WeatherData {
+  final double temperature;
+  final double rainProbability;
+  final double windSpeed;
+
+  WeatherData({
+    required this.temperature,
+    required this.rainProbability,
+    required this.windSpeed,
+  });
+}
+
+class MarineData {
+  final double waveHeight;
+  final double waterLevel;
+
+  MarineData({
+    required this.waveHeight,
+    required this.waterLevel,
+  });
+}
 
 class Fish {
   final String imageUrl;
@@ -24,10 +50,79 @@ class HomepageState extends State<Homepage> {
         imageUrl: 'assets/images/Salmon.png',
         name: 'Salmon',
         distance: '2.5 km Away'),
-    Fish(imageUrl: 'assets/images/Tuna.png', name: 'Tuna', distance: '3.8 km Away'),
     Fish(
-        imageUrl: 'assets/images/Trout.png', name: 'Trout', distance: '1.2 km Away'),
+        imageUrl: 'assets/images/Tuna.png',
+        name: 'Tuna',
+        distance: '3.8 km Away'),
+    Fish(
+        imageUrl: 'assets/images/Trout.png',
+        name: 'Trout',
+        distance: '1.2 km Away'),
   ];
+
+  WeatherData? weatherData;
+  MarineData? marineData;
+  bool isLoading = true;
+  String error = '';
+  LocationData? currentLocation;
+
+  static const String openWeatherMapKey = "2c6b0fed6195b024d1e9b9144d8dcf2a";
+  static const String oneCallUrl =
+      "https://api.openweathermap.org/data/3.0/onecall";
+  static const String openMeteoMarineUrl =
+      "https://marine-api.open-meteo.com/v1/marine";
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    final location = Location();
+    try {
+      currentLocation = await location.getLocation();
+      await _fetchWeatherData();
+      await _fetchMarineData();
+    } catch (e) {
+      setState(() {
+        error = 'Failed to get data: $e';
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _fetchWeatherData() async {
+    final response = await http.get(Uri.parse(
+        '$oneCallUrl?lat=${currentLocation?.latitude ?? 13.0878}&lon=${currentLocation?.longitude ?? 80.2785}&exclude=minutely,hourly&appid=$openWeatherMapKey&units=metric'));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        weatherData = WeatherData(
+          temperature: data['current']['temp'],
+          rainProbability: data['current']['rain']?['1h'] ?? 0.0,
+          windSpeed: data['current']['wind_speed'],
+        );
+      });
+    }
+  }
+
+  Future<void> _fetchMarineData() async {
+    final response = await http.get(Uri.parse(
+        '$openMeteoMarineUrl?latitude=${currentLocation?.latitude ?? 13.0878}&longitude=${currentLocation?.longitude ?? 80.2785}&current=wave_height,water_level'));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        marineData = MarineData(
+          waveHeight: data['current']['wave_height'],
+          waterLevel: data['current']['water_level'],
+        );
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +130,8 @@ class HomepageState extends State<Homepage> {
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: Image.asset(
-          'assets/logos/fisher.png', // Path to your image
-          height: 60, // Adjust the height as needed
+          'assets/logos/fisher.png',
+          height: 60,
         ),
         backgroundColor: Colors.white,
         elevation: 1,
@@ -51,18 +146,32 @@ class HomepageState extends State<Homepage> {
               message: "It's a great day to go fishing!",
             ),
             const SizedBox(height: 30),
-            _buildLocalWeather(
-              location: "Chennai, Tamil Nadu",
-              date: "Wed 12 March, 2025",
-              temperature: "32°C",
-              rainProbability: "20%",
-              waveHeight: "2.5",
-              tideWaterLevel: "0.925",
-              windSpeed: "15",
-            ),
+            isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : error.isNotEmpty
+                    ? Center(child: Text(error))
+                    : _buildLocalWeather(
+                        location: currentLocation != null
+                            ? "Current Location"
+                            : "Chennai, Tamil Nadu",
+                        date: DateFormat('EEE d MMM, y').format(DateTime.now()),
+                        temperature:
+                            '${weatherData?.temperature.toStringAsFixed(1) ?? '32'}°C',
+                        rainProbability:
+                            '${weatherData?.rainProbability.toStringAsFixed(0) ?? '20'}%',
+                        waveHeight:
+                            marineData?.waveHeight.toStringAsFixed(1) ?? '2.5',
+                        tideWaterLevel:
+                            marineData?.waterLevel.toStringAsFixed(3) ??
+                                '0.925',
+                        windSpeed:
+                            weatherData?.windSpeed.toStringAsFixed(0) ?? '15',
+                      ),
             const SizedBox(height: 20),
             _buildSearchBar(context),
-            const SizedBox(height: 20),
+            const SizedBox(height: 5),
+            _buildLocateFishingAreaButton(),
+            const SizedBox(height: 10),
             _buildSectionTitle("Nearby Fishes"),
             const SizedBox(height: 10),
             _buildCarousel(fishList),
@@ -74,6 +183,8 @@ class HomepageState extends State<Homepage> {
     );
   }
 
+// Keep all other widget building methods same as original
+// (_buildUserInfo, _buildWeatherInfo, _buildSearchBar, etc.)
   Widget _buildUserInfo({required String name, required String message}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,7 +325,6 @@ class HomepageState extends State<Homepage> {
     );
   }
 
-
   Widget _buildWeatherInfo(IconData icon, String label, String value) {
     return Column(
       children: [
@@ -261,12 +371,53 @@ class HomepageState extends State<Homepage> {
     );
   }
 
+  Widget _buildLocateFishingAreaButton() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ElevatedButton(
+        onPressed: () {
+          // Add functionality to locate fishing area
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor:
+              Color.fromRGBO(51, 108, 138, 1), // Primary theme color
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 3, // Adds a subtle shadow
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(Icons.location_on,
+                color: Colors.white, size: 22), // Location icon
+            SizedBox(width: 10),
+            Text(
+              "Locate Fishing Area",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildSectionTitle(String title) {
-    return Center(
+    return Align(
+      alignment: Alignment.centerLeft,
       child: Text(
         title,
         style: const TextStyle(
-            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blueGrey),
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.blueGrey,
+        ),
       ),
     );
   }
@@ -342,4 +493,4 @@ class HomepageState extends State<Homepage> {
       }),
     );
   }
-} 
+}

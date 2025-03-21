@@ -12,7 +12,7 @@ class FAppTheme {
     primaryColor: Colors.blue,
     scaffoldBackgroundColor: Colors.white,
     textTheme: FTextTheme.lightTextTheme, // Fixed reference
-    elevatedButtonTheme:FElevatedButtonTheme.lightElevatedButtonTheme,
+    elevatedButtonTheme: FElevatedButtonTheme.lightElevatedButtonTheme,
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -22,6 +22,6 @@ class FAppTheme {
     primaryColor: Colors.blueGrey,
     scaffoldBackgroundColor: Colors.black,
     textTheme: FTextTheme.darkTextTheme, // Assuming this exists
-    elevatedButtonTheme:FElevatedButtonTheme.darkElevatedButtonTheme,
+    elevatedButtonTheme: FElevatedButtonTheme.darkElevatedButtonTheme,
   );
 }

@@ -3,6 +3,8 @@ import 'mappage.dart';
 import 'package:fishmaster/features/Activities/fish_name_string/TamilFish.dart';
 
 class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
+
   @override
   _SearchPageState createState() => _SearchPageState();
 }
