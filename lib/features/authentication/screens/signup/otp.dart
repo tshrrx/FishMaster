@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:fishmaster/utils/constants/sizes.dart';
 import 'package:fishmaster/features/Activities/controller/homescreen.dart';
 
-
 class OTPVerificationScreen extends StatefulWidget {
   const OTPVerificationScreen({super.key});
 

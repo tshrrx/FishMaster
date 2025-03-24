@@ -7,7 +7,7 @@ import 'dart:convert';
 class MapPage extends StatefulWidget {
   final String fishSpecies;
 
-  const MapPage({required this.fishSpecies, Key? key}) : super(key: key);
+  const MapPage({required this.fishSpecies, super.key});
 
   @override
   _MapPageState createState() => _MapPageState();

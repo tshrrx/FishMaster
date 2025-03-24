@@ -98,7 +98,6 @@ class _SignupScreenState extends State<SignupScreen> {
                           child: Checkbox(
                             value: _isChecked,
                             onChanged: (value) {
-                              
                               setState(() {
                                 _isChecked = value!;
                               });
@@ -152,7 +151,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         onPressed: () {
                           Get.to(() => OTPVerificationScreen());
                         },
-
                         child: const Text("Create Account"),
                       ),
                     ),

@@ -6,7 +6,6 @@ import 'package:get/get.dart'; // Import GetX
 import 'package:fishmaster/features/authentication/screens/signup/otp.dart';
 import 'package:fishmaster/features/Activities/controller/homescreen.dart';
 
-
 void main() {
   runApp(const App());
 }

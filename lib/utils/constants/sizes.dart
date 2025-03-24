@@ -1,7 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:fishmaster/features/authentication/screens/signup/signup.dart';
-
-
 class FSizes {
   // Padding and margin sizes
   static const double xs = 4.0;
