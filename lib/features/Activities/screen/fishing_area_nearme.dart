@@ -41,14 +41,14 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
   // Convert the selectedFishes string (local names) into a list of scientific names
   List<String> getScientificNames(String selectedFishes) {
     // Split by comma and trim spaces
-    List<String> localNames = selectedFishes.split(',').map((s) => s.trim()).toList();
+    List<String> localNames =
+        selectedFishes.split(',').map((s) => s.trim()).toList();
     List<String> scientificNames = [];
 
     for (String local in localNames) {
       // Filter fishList for the matching fish (ignoring case)
-      final matches = fishList.where(
-              (fish) => fish.localName.toLowerCase() == local.toLowerCase()
-      );
+      final matches = fishList
+          .where((fish) => fish.localName.toLowerCase() == local.toLowerCase());
       if (matches.isNotEmpty) {
         scientificNames.add(matches.first.scientificName);
       }
@@ -60,7 +60,8 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
   // Helper function to get local name from scientific name
   String getLocalName(String scientificName) {
     final matches = fishList.where(
-          (fish) => fish.scientificName.toLowerCase() == scientificName.toLowerCase(),
+      (fish) =>
+          fish.scientificName.toLowerCase() == scientificName.toLowerCase(),
     );
     if (matches.isNotEmpty) {
       return matches.first.localName;
@@ -94,13 +95,13 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
           }
         }
       } else {
-        debugPrint('Error fetching occurrences for $species: ${response.statusCode}');
+        debugPrint(
+            'Error fetching occurrences for $species: ${response.statusCode}');
       }
     } catch (e) {
       debugPrint('Exception fetching occurrences for $species: $e');
     }
   }
-
 
   // Loop through all scientific names and fetch their occurrence data
   Future<void> fetchAllOccurrences() async {
@@ -113,11 +114,11 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
   Future<void> _loadFishingEffortData() async {
     try {
       final String jsonString =
-      await rootBundle.loadString('assets/response4.json');
+          await rootBundle.loadString('assets/response4.json');
       final Map<String, dynamic> jsonData = jsonDecode(jsonString);
       final List<dynamic> entries = jsonData['entries'];
       final List<dynamic> fishingData =
-      entries[0]['public-global-fishing-effort:v3.0'];
+          entries[0]['public-global-fishing-effort:v3.0'];
 
       Set<Circle> circles = {};
 
@@ -234,7 +235,8 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
 
     return RichText(
       text: TextSpan(
-        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black87),
+        style: TextStyle(
+            fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black87),
         children: [
           TextSpan(
             text: "High Effort Zone 🟢: ",
@@ -284,8 +286,7 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
                   myLocationEnabled: true,
                   myLocationButtonEnabled: false,
                 ),
-                if (_isLoading)
-                  Center(child: CircularProgressIndicator()),
+                if (_isLoading) Center(child: CircularProgressIndicator()),
               ],
             ),
           ),
@@ -301,11 +302,15 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
               children: [
                 RichText(
                   text: TextSpan(
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87),
                     children: [
                       TextSpan(
                         text: "Fishing Gear: ",
-                        style: TextStyle(color: Color.fromRGBO(51, 108, 138, 1)),
+                        style:
+                            TextStyle(color: Color.fromRGBO(51, 108, 138, 1)),
                       ),
                       TextSpan(
                         text: widget.selectedGear,
@@ -317,7 +322,10 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
                 SizedBox(height: 3),
                 Text(
                   "Allowed Fishing hours as per zones ",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black87),
                 ),
                 SizedBox(height: 5),
                 ListTile(
@@ -336,14 +344,18 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromRGBO(51, 108, 138, 1),
-                      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     child: Text(
                       "Start Fishing",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                     ),
                   ),
                 ),
@@ -355,11 +367,14 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           LocationPermission permission = await Geolocator.checkPermission();
-          if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+          if (permission == LocationPermission.denied ||
+              permission == LocationPermission.deniedForever) {
             permission = await Geolocator.requestPermission();
           }
-          if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
-            Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+          if (permission == LocationPermission.whileInUse ||
+              permission == LocationPermission.always) {
+            Position position = await Geolocator.getCurrentPosition(
+                desiredAccuracy: LocationAccuracy.high);
             _mapController?.animateCamera(
               CameraUpdate.newLatLng(
                 LatLng(position.latitude, position.longitude),

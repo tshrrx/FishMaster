@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../../../models/WeatherGeneral/finalweatherData/weather_data.dart';
 import 'fishing_area_nearme.dart';
+import 'package:intl/intl.dart';
 
 class Fish {
   final String imageUrl;
@@ -49,6 +50,10 @@ class HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     WeatherData weather = globalController.getData();
     MarineWeatherData marineWeather = globalController.getMarineData();
+    int timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    String formattedDate = DateFormat('EEEE, d MMMM y').format(date);
+
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
@@ -71,12 +76,13 @@ class HomepageState extends State<Homepage> {
             const SizedBox(height: 30),
             _buildLocalWeather(
               location: "Chennai, Tamil Nadu",
-              date: "Wed 12 March, 2025",
+              date: "$formattedDate",
               temperature: "${weather.current?.current.temp}°C",
-              rainProbability: "",
-              waveHeight: "2.5", // Static or from another source
-              tideWaterLevel: "0.925", // Static for now
-              windSpeed: " m/s",
+              rainProbability: "${weather.minutely?.minutely[0].precipitation}",
+              waveHeight:
+                  "${marineWeather.current?.current.waveHeight} ${marineWeather.currentunits?.currentunits.waveHeight}", // Static or from another source
+              tideWaterLevel: "0.925",
+              windSpeed: "${(weather.current?.current.windSpeed)} m/s",
             ),
             const SizedBox(height: 20),
             _buildSearchBar(context),
@@ -203,10 +209,11 @@ class HomepageState extends State<Homepage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildWeatherInfo(Icons.water_drop, "Rain", rainProbability),
-              _buildWeatherInfo(Icons.waves, "Waves", "$waveHeight m"),
-              _buildWeatherInfo(Icons.thermostat, "Tide", "$tideWaterLevel m"),
-              _buildWeatherInfo(Icons.air, "Wind", "$windSpeed m/s"),
+              _buildWeatherInfo(
+                  Icons.water_drop, "Rain", "$rainProbability mm/hr"),
+              _buildWeatherInfo(Icons.waves, "Waves", "$waveHeight"),
+              _buildWeatherInfo(Icons.thermostat, "Tide", "$tideWaterLevel"),
+              _buildWeatherInfo(Icons.air, "Wind", "$windSpeed "),
             ],
           ),
 

@@ -16,10 +16,12 @@ class _SearchPageState extends State<SearchPage> {
       filteredFishList = query.isEmpty
           ? fishList
           : fishList
-          .where((fish) =>
-      fish.localName.toLowerCase().contains(query.toLowerCase()) ||
-          fish.scientificName.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+              .where((fish) =>
+                  fish.localName.toLowerCase().contains(query.toLowerCase()) ||
+                  fish.scientificName
+                      .toLowerCase()
+                      .contains(query.toLowerCase()))
+              .toList();
     });
   }
 
@@ -82,7 +84,7 @@ class _SearchPageState extends State<SearchPage> {
                           height: 100,
                           decoration: BoxDecoration(
                             borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(10)),
+                                BorderRadius.vertical(top: Radius.circular(10)),
                             image: DecorationImage(
                               image: AssetImage(fish.imagePath),
                               fit: BoxFit.cover,

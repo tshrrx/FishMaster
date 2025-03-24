@@ -1,7 +1,8 @@
+import 'package:fishmaster/models/WeatherGeneral/weather/temp.dart';
+
 class WeatherDataDaily {
   List<Daily> daily;
   WeatherDataDaily({required this.daily});
-
   factory WeatherDataDaily.fromJson(Map<String, dynamic> json) =>
       WeatherDataDaily(
           daily: List<Daily>.from(json['daily'].map((e) => Daily.fromJson(e))));
@@ -10,11 +11,13 @@ class WeatherDataDaily {
 class Daily {
   int? dt;
   Temp? temp;
+  double? rain;
   List<Weather>? weather;
 
   Daily({
     this.dt,
     this.temp,
+    this.rain,
     this.weather,
   });
 
@@ -23,6 +26,7 @@ class Daily {
         temp: json['temp'] == null
             ? null
             : Temp.fromJson(json['temp'] as Map<String, dynamic>),
+        rain: (json['rain'] as num?)?.toDouble(),
         weather: (json['weather'] as List<dynamic>?)
             ?.map((e) => Weather.fromJson(e as Map<String, dynamic>))
             .toList(),
@@ -30,37 +34,9 @@ class Daily {
 
   Map<String, dynamic> toJson() => {
         'dt': dt,
+        'rain': rain,
         'temp': temp?.toJson(),
         'weather': weather?.map((e) => e.toJson()).toList(),
-      };
-}
-
-class Temp {
-  double? day;
-  int? min;
-  int? max;
-  double? night;
-  double? eve;
-  double? morn;
-
-  Temp({this.day, this.min, this.max, this.night, this.eve, this.morn});
-
-  factory Temp.fromJson(Map<String, dynamic> json) => Temp(
-        day: (json['day'] as num?)?.toDouble(),
-        min: (json['min'] as num?)?.round(),
-        max: (json['max'] as num?)?.round(),
-        night: (json['night'] as num?)?.toDouble(),
-        eve: (json['eve'] as num?)?.toDouble(),
-        morn: (json['morn'] as num?)?.toDouble(),
-      );
-
-  Map<String, dynamic> toJson() => {
-        'day': day,
-        'min': min,
-        'max': max,
-        'night': night,
-        'eve': eve,
-        'morn': morn,
       };
 }
 

@@ -18,8 +18,6 @@ class GlobalController extends GetxController {
   final marineweatherData = MarineWeatherData().obs;
   final weatherData = WeatherData().obs;
 
-  get marineDataHourly => null;
-
   WeatherData getData() {
     return weatherData.value;
   }
@@ -62,32 +60,32 @@ class GlobalController extends GetxController {
       lat.value = position.latitude;
       long.value = position.longitude;
 
-       FetchAPI fetchAPI = FetchAPI();
+      FetchAPI fetchAPI = FetchAPI();
 
       try {
-      var weather = await fetchAPI.fetchWeatherData(lat.value, long.value);
-      if (weather != null) {
-        weatherData.value = weather;
-        print("Weather data fetched successfully.");
-      } else {
-        print("Error: Failed to fetch weather data.");
+        var weather = await fetchAPI.fetchWeatherData(lat.value, long.value);
+        if (weather != null) {
+          weatherData.value = weather;
+          print("Weather data fetched successfully.");
+        } else {
+          print("Error: Failed to fetch weather data.");
+        }
+      } catch (e) {
+        print("Weather API Error: $e");
       }
-    } catch (e) {
-      print("Weather API Error: $e");
-    }
 
-    // Fetch marine data with error handling
-    try {
-      var marine = await fetchAPI.fetchMarineData(lat.value, long.value);
-      if (marine != null) {
-        marineweatherData.value = marine;
-        print("Marine data fetched successfully.");
-      } else {
-        print("Error: Failed to fetch marine data.");
+      // Fetch marine data with error handling
+      try {
+        var marine = await fetchAPI.fetchMarineData(lat.value, long.value);
+        if (marine != null) {
+          marineweatherData.value = marine;
+          print("Marine data fetched successfully.");
+        } else {
+          print("Error: Failed to fetch marine data.");
+        }
+      } catch (e) {
+        print("Marine API Error: $e");
       }
-    } catch (e) {
-      print("Marine API Error: $e");
-    }
 
       isLoading.value = false;
     } catch (e) {

@@ -1,4 +1,8 @@
 import 'dart:convert';
+import 'package:fishmaster/models/Marine/finalmarineData/marine_currentunits.dart';
+import 'package:fishmaster/models/Marine/finalmarineData/marine_dailyunits.dart';
+import 'package:fishmaster/models/Marine/finalmarineData/marine_hourlyunits.dart';
+import 'package:fishmaster/models/WeatherGeneral/finalweatherData/weather_minutely.dart';
 import 'package:http/http.dart' as http;
 import 'package:fishmaster/controllers/marineweatherController/apiurl.dart'
     as marine_api;
@@ -21,6 +25,9 @@ class FetchAPI {
         MarineDataCurrent.fromJson(jsonString),
         MarineDataHourly.fromJson(jsonString),
         MarineDataDaily.fromJson(jsonString),
+        MarineDataCurrentUnits.fromJson(jsonString),
+        MarineDataHourlyUnits.fromJson(jsonString),
+        MarineDataDailyUnits.fromJson(jsonString),
       );
     });
   }
@@ -32,6 +39,7 @@ class FetchAPI {
         WeatherDataCurrent.fromJson(jsonString),
         WeatherDataHourly.fromJson(jsonString),
         WeatherDataDaily.fromJson(jsonString),
+        WeatherDataMinutely.fromJson(jsonString),
       );
     });
   }
