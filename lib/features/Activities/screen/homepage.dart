@@ -1,32 +1,13 @@
+import 'package:fishmaster/controllers/global_contoller.dart';
+import 'package:fishmaster/features/Activities/fish_name_string/TamilFish.dart';
+import 'package:fishmaster/features/Activities/screen/searchPage.dart';
+import 'package:fishmaster/models/Marine/finalmarineData/marine_data.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:intl/intl.dart';
-import 'package:location/location.dart';
-import 'package:untitledwdjwhjhhiwaih/features/Activities/screen/searchPage.dart';
-
-class WeatherData {
-  final double temperature;
-  final double rainProbability;
-  final double windSpeed;
-
-  WeatherData({
-    required this.temperature,
-    required this.rainProbability,
-    required this.windSpeed,
-  });
-}
-
-class MarineData {
-  final double waveHeight;
-  final double waterLevel;
-
-  MarineData({
-    required this.waveHeight,
-    required this.waterLevel,
-  });
-}
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import '../../../models/WeatherGeneral/finalweatherData/weather_data.dart';
+import 'fishing_area_nearme.dart';
 
 class Fish {
   final String imageUrl;
@@ -44,6 +25,10 @@ class Homepage extends StatefulWidget {
 }
 
 class HomepageState extends State<Homepage> {
+  final GlobalController globalController = Get.find<GlobalController>();
+  String selectedGear = "Hook & Line";
+  String searchText = "";
+
   int _currentIndex = 0;
   final List<Fish> fishList = [
     Fish(
@@ -60,78 +45,16 @@ class HomepageState extends State<Homepage> {
         distance: '1.2 km Away'),
   ];
 
-  WeatherData? weatherData;
-  MarineData? marineData;
-  bool isLoading = true;
-  String error = '';
-  LocationData? currentLocation;
-
-  static const String openWeatherMapKey = "2c6b0fed6195b024d1e9b9144d8dcf2a";
-  static const String oneCallUrl =
-      "https://api.openweathermap.org/data/3.0/onecall";
-  static const String openMeteoMarineUrl =
-      "https://marine-api.open-meteo.com/v1/marine";
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchData();
-  }
-
-  Future<void> _fetchData() async {
-    final location = Location();
-    try {
-      currentLocation = await location.getLocation();
-      await _fetchWeatherData();
-      await _fetchMarineData();
-    } catch (e) {
-      setState(() {
-        error = 'Failed to get data: $e';
-        isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _fetchWeatherData() async {
-    final response = await http.get(Uri.parse(
-        '$oneCallUrl?lat=${currentLocation?.latitude ?? 13.0878}&lon=${currentLocation?.longitude ?? 80.2785}&exclude=minutely,hourly&appid=$openWeatherMapKey&units=metric'));
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      setState(() {
-        weatherData = WeatherData(
-          temperature: data['current']['temp'],
-          rainProbability: data['current']['rain']?['1h'] ?? 0.0,
-          windSpeed: data['current']['wind_speed'],
-        );
-      });
-    }
-  }
-
-  Future<void> _fetchMarineData() async {
-    final response = await http.get(Uri.parse(
-        '$openMeteoMarineUrl?latitude=${currentLocation?.latitude ?? 13.0878}&longitude=${currentLocation?.longitude ?? 80.2785}&current=wave_height,water_level'));
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      setState(() {
-        marineData = MarineData(
-          waveHeight: data['current']['wave_height'],
-          waterLevel: data['current']['water_level'],
-        );
-        isLoading = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    WeatherData weather = globalController.getData();
+    MarineWeatherData marineWeather = globalController.getMarineData();
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: Image.asset(
-          'assets/logos/fisher.png',
-          height: 60,
+          'assets/logos/fisher.png', // Path to your image
+          height: 60, // Adjust the height as needed
         ),
         backgroundColor: Colors.white,
         elevation: 1,
@@ -146,32 +69,20 @@ class HomepageState extends State<Homepage> {
               message: "It's a great day to go fishing!",
             ),
             const SizedBox(height: 30),
-            isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : error.isNotEmpty
-                    ? Center(child: Text(error))
-                    : _buildLocalWeather(
-                        location: currentLocation != null
-                            ? "Current Location"
-                            : "Chennai, Tamil Nadu",
-                        date: DateFormat('EEE d MMM, y').format(DateTime.now()),
-                        temperature:
-                            '${weatherData?.temperature.toStringAsFixed(1) ?? '32'}°C',
-                        rainProbability:
-                            '${weatherData?.rainProbability.toStringAsFixed(0) ?? '20'}%',
-                        waveHeight:
-                            marineData?.waveHeight.toStringAsFixed(1) ?? '2.5',
-                        tideWaterLevel:
-                            marineData?.waterLevel.toStringAsFixed(3) ??
-                                '0.925',
-                        windSpeed:
-                            weatherData?.windSpeed.toStringAsFixed(0) ?? '15',
-                      ),
+            _buildLocalWeather(
+              location: "Chennai, Tamil Nadu",
+              date: "Wed 12 March, 2025",
+              temperature: "${weather.current?.current.temp}°C",
+              rainProbability: "",
+              waveHeight: "2.5", // Static or from another source
+              tideWaterLevel: "0.925", // Static for now
+              windSpeed: " m/s",
+            ),
             const SizedBox(height: 20),
             _buildSearchBar(context),
-            const SizedBox(height: 5),
-            _buildLocateFishingAreaButton(),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
+            _buildGearSelectionAndLocateButton(),
+            const SizedBox(height: 20),
             _buildSectionTitle("Nearby Fishes"),
             const SizedBox(height: 10),
             _buildCarousel(fishList),
@@ -183,8 +94,6 @@ class HomepageState extends State<Homepage> {
     );
   }
 
-// Keep all other widget building methods same as original
-// (_buildUserInfo, _buildWeatherInfo, _buildSearchBar, etc.)
   Widget _buildUserInfo({required String name, required String message}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -344,10 +253,22 @@ class HomepageState extends State<Homepage> {
 
   Widget _buildSearchBar(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SearchPage()),
-      ),
+      onTap: () async {
+        final List<TamilFish>? selectedFishes = await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SearchPage()),
+        );
+
+        if (selectedFishes != null && selectedFishes.isNotEmpty) {
+          // Update search bar with selected fish names
+          String selectedFishNames =
+              selectedFishes.map((fish) => fish.localName).join(", ");
+          setState(() {
+            searchText =
+                selectedFishNames; // Assuming `searchText` is a state variable
+          });
+        }
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         decoration: BoxDecoration(
@@ -358,48 +279,16 @@ class HomepageState extends State<Homepage> {
           ],
         ),
         child: Row(
-          children: const [
+          children: [
             Icon(Icons.search, color: Colors.grey, size: 20),
             SizedBox(width: 8),
-            Text(
-              "Search for fish or locations...",
-              style: TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLocateFishingAreaButton() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 20),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: ElevatedButton(
-        onPressed: () {
-          // Add functionality to locate fishing area
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor:
-              Color.fromRGBO(51, 108, 138, 1), // Primary theme color
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 3, // Adds a subtle shadow
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.location_on,
-                color: Colors.white, size: 22), // Location icon
-            SizedBox(width: 10),
-            Text(
-              "Locate Fishing Area",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+            Expanded(
+              child: Text(
+                searchText.isNotEmpty
+                    ? searchText
+                    : "Search for specific fishes...",
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
@@ -408,16 +297,140 @@ class HomepageState extends State<Homepage> {
     );
   }
 
+  Widget _buildGearSelectionAndLocateButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Container(
+            height: 50,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300),
+              boxShadow: [
+                BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 4)
+              ],
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: selectedGear, // Bind state variable
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedGear = newValue!;
+                  });
+                },
+                style: const TextStyle(fontSize: 16, color: Colors.blueGrey),
+                icon: const Icon(Icons.arrow_drop_down, color: Colors.blueGrey),
+                isExpanded: true,
+                items: [
+                  DropdownMenuItem(
+                    value: "Hook & Line",
+                    child: Row(
+                      children: const [
+                        FaIcon(FontAwesomeIcons.fish,
+                            color: Colors.blueGrey, size: 20),
+                        SizedBox(width: 8),
+                        Text("Hook & Line", style: TextStyle(fontSize: 16)),
+                      ],
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: "Gillnets",
+                    child: Row(
+                      children: const [
+                        Icon(Icons.grid_3x3, color: Colors.blueGrey, size: 20),
+                        SizedBox(width: 8),
+                        Text("Gillnets", style: TextStyle(fontSize: 16)),
+                      ],
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: "Longlines",
+                    child: Row(
+                      children: const [
+                        Icon(Icons.line_weight,
+                            color: Colors.blueGrey, size: 20),
+                        SizedBox(width: 8),
+                        Text("Longlines", style: TextStyle(fontSize: 16)),
+                      ],
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: "Trawling",
+                    child: Row(
+                      children: const [
+                        Icon(Icons.directions_boat,
+                            color: Colors.blueGrey, size: 20),
+                        SizedBox(width: 8),
+                        Text("Trawling", style: TextStyle(fontSize: 16)),
+                      ],
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: "Purse Seining",
+                    child: Row(
+                      children: const [
+                        Icon(Icons.anchor, color: Colors.blueGrey, size: 20),
+                        SizedBox(width: 8),
+                        Text("Purse Seining", style: TextStyle(fontSize: 16)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FishingAreaNearby(
+                          selectedGear: selectedGear,
+                          selectedFishes: searchText,
+                        )),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF336C8A),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 3,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.location_on, color: Colors.white, size: 22),
+                SizedBox(width: 10),
+                Text(
+                  "Fishing Area",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildSectionTitle(String title) {
-    return Align(
-      alignment: Alignment.centerLeft,
+    return Center(
       child: Text(
         title,
         style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.blueGrey,
-        ),
+            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blueGrey),
       ),
     );
   }
@@ -428,8 +441,8 @@ class HomepageState extends State<Homepage> {
       options: CarouselOptions(
         height: 180.0,
         enlargeCenterPage: true,
-        autoPlay: true,
-        autoPlayInterval: const Duration(seconds: 3),
+        // autoPlay: true,
+        // autoPlayInterval: const Duration(seconds: 3),
         onPageChanged: (index, reason) => setState(() => _currentIndex = index),
       ),
       itemBuilder: (context, index, realIndex) {
