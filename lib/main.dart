@@ -2,11 +2,12 @@ import 'package:fishmaster/features/authentication/screens/signup/signup.dart';
 import 'package:fishmaster/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fishmaster/features/authentication/screens/login/login.dart';
-import 'package:get/get.dart'; // Import GetX
+import 'package:get/get.dart';
 import 'package:fishmaster/features/authentication/screens/signup/otp.dart';
 import 'package:fishmaster/features/Activities/controller/homescreen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const App());
 }
 
@@ -16,7 +17,6 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      // Use GetMaterialApp instead of MaterialApp
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
       theme: FAppTheme.lightTheme,

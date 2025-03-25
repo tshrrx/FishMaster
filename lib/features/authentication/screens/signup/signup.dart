@@ -1,3 +1,4 @@
+import 'package:fishmaster/controllers/global_contoller.dart';
 import 'package:fishmaster/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -12,6 +13,8 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  final GlobalController globalController =
+      Get.put(GlobalController(), permanent: true);
   bool _isChecked = false; // Checkbox state
 
   InputDecoration customInputDecoration(String label, IconData icon) {

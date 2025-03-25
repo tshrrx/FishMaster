@@ -1,6 +1,6 @@
-import '../finalweatherData/weather_daily.dart';
-import '../finalweatherData/weather_hourly.dart';
 import 'current.dart';
+import 'daily.dart';
+import 'hourly.dart';
 
 class Weather {
   double? lat;
