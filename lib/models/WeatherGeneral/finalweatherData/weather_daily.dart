@@ -1,4 +1,4 @@
-import 'package:fishmaster/models/WeatherGeneral/weather/temp.dart';
+import 'package:fishmaster/models/WeatherGeneral/weather_jsonmapping/temp.dart';
 
 class WeatherDataDaily {
   List<Daily> daily;

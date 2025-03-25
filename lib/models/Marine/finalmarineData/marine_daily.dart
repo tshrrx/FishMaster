@@ -1,8 +1,8 @@
 import 'package:fishmaster/models/Marine/finalmarineData/marine_current.dart';
 import 'package:fishmaster/models/Marine/finalmarineData/marine_hourly.dart';
-import 'package:fishmaster/models/Marine/marineweather/current_units.dart';
-import 'package:fishmaster/models/Marine/marineweather/daily_units.dart';
-import 'package:fishmaster/models/Marine/marineweather/hourly_units.dart';
+import 'package:fishmaster/models/Marine/marineweather_jsonmapping/current_units.dart';
+import 'package:fishmaster/models/Marine/marineweather_jsonmapping/daily_units.dart';
+import 'package:fishmaster/models/Marine/marineweather_jsonmapping/hourly_units.dart';
 
 class MarineDataDaily {
   final Daily daily;

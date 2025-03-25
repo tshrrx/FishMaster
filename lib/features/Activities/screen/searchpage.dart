@@ -2,6 +2,7 @@ import 'package:fishmaster/features/Activities/fish_name_string/tamilfish.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
   @override
   _SearchPageState createState() => _SearchPageState();
 }
