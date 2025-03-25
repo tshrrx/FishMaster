@@ -2,13 +2,13 @@ import 'package:fishmaster/controllers/global_contoller.dart';
 import 'package:fishmaster/features/Activities/fish_name_string/TamilFish.dart';
 import 'package:fishmaster/features/Activities/screen/searchPage.dart';
 import 'package:fishmaster/models/Marine/finalmarineData/marine_data.dart';
+import 'package:fishmaster/utils/constants/day_date.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../../../models/WeatherGeneral/finalweatherData/weather_data.dart';
 import 'fishing_area_nearme.dart';
-import 'package:intl/intl.dart';
 
 class Fish {
   final String imageUrl;
@@ -50,16 +50,14 @@ class HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     WeatherData weather = globalController.getData();
     MarineWeatherData marineWeather = globalController.getMarineData();
-    int timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-    String formattedDate = DateFormat('EEEE, d MMMM y').format(date);
-
+    int timestamp = DateUtil.getCurrentTimestamp();
+    String formattedDate = DateUtil.formatTimestamp(timestamp);
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: Image.asset(
-          'assets/logos/fisher.png', // Path to your image
-          height: 60, // Adjust the height as needed
+          'assets/logos/fisher.png',
+          height: 60,
         ),
         backgroundColor: Colors.white,
         elevation: 1,
@@ -76,12 +74,13 @@ class HomepageState extends State<Homepage> {
             const SizedBox(height: 30),
             _buildLocalWeather(
               location: "Chennai, Tamil Nadu",
-              date: "$formattedDate",
+              date: formattedDate,
               temperature: "${weather.current?.current.temp}°C",
-              rainProbability: "${weather.minutely?.minutely[0].precipitation}",
+              rainLevel: "${weather.minutely?.minutely[0].precipitation}",
               waveHeight:
                   "${marineWeather.current?.current.waveHeight} ${marineWeather.currentunits?.currentunits.waveHeight}", // Static or from another source
-              tideWaterLevel: "0.925",
+              ssT:
+                  "${marineWeather.current?.current.seaSurfaceTemperature} ${marineWeather.currentunits?.currentunits.seaSurfaceTemperature}", // Static or from another source
               windSpeed: "${(weather.current?.current.windSpeed)} m/s",
             ),
             const SizedBox(height: 20),
@@ -135,9 +134,9 @@ class HomepageState extends State<Homepage> {
     required String location,
     required String date,
     required String temperature,
-    required String rainProbability,
+    required String rainLevel,
     required String waveHeight,
-    required String tideWaterLevel,
+    required String ssT,
     required String windSpeed,
   }) {
     return Container(
@@ -204,28 +203,22 @@ class HomepageState extends State<Homepage> {
           ),
 
           const SizedBox(height: 12),
-
-          // Weather Info (Rain, Waves, Tide, Wind)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildWeatherInfo(
-                  Icons.water_drop, "Rain", "$rainProbability mm/hr"),
-              _buildWeatherInfo(Icons.waves, "Waves", "$waveHeight"),
-              _buildWeatherInfo(Icons.thermostat, "Tide", "$tideWaterLevel"),
+              _buildWeatherInfo(Icons.water_drop, "Rain", "$rainLevel mm/hr"),
+              _buildWeatherInfo(Icons.waves, "Waves", waveHeight),
+              _buildWeatherInfo(Icons.thermostat, "SST", ssT),
               _buildWeatherInfo(Icons.air, "Wind", "$windSpeed "),
             ],
           ),
 
           const SizedBox(height: 11),
 
-          // More Details Button
           Align(
             alignment: Alignment.centerRight,
             child: GestureDetector(
-              onTap: () {
-                // Navigate to detailed weather screen
-              },
+              onTap: () {},
               child: const Text(
                 "More",
                 style: TextStyle(
