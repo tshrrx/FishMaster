@@ -4,10 +4,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+
 class MapPage extends StatefulWidget {
   final String fishSpecies;
 
   const MapPage({required this.fishSpecies, super.key});
+
 
   @override
   _MapPageState createState() => _MapPageState();

@@ -1,3 +1,4 @@
+//home
 import 'package:fishmaster/controllers/global_contoller.dart';
 import 'package:fishmaster/features/Activities/fish_name_string/TamilFish.dart';
 import 'package:fishmaster/features/Activities/screen/searchPage.dart';
@@ -7,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import '../../../models/WeatherGeneral/finalweatherData/weather_data.dart';
+import 'package:fishmaster/models/WeatherGeneral/finalweatherData/weather_data.dart';
 import 'fishing_area_nearme.dart';
 
 class Fish {
@@ -48,8 +49,9 @@ class HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    WeatherData weather = globalController.getData();
-    MarineWeatherData marineWeather = globalController.getMarineData();
+    WeatherData weather = globalController.weather;
+    MarineWeatherData marineWeather = globalController.marine;
+
     int timestamp = DateUtil.getCurrentTimestamp();
     String formattedDate = DateUtil.formatTimestamp(timestamp);
     return Scaffold(
@@ -78,9 +80,9 @@ class HomepageState extends State<Homepage> {
               temperature: "${weather.current?.current.temp}°C",
               rainLevel: "${weather.minutely?.minutely[0].precipitation}",
               waveHeight:
-                  "${marineWeather.current?.current.waveHeight} ${marineWeather.currentunits?.currentunits.waveHeight}", // Static or from another source
+              "${marineWeather.current?.current.waveHeight} ${marineWeather.currentunits?.currentunits.waveHeight}", // Static or from another source
               ssT:
-                  "${marineWeather.current?.current.seaSurfaceTemperature} ${marineWeather.currentunits?.currentunits.seaSurfaceTemperature}", // Static or from another source
+              "${marineWeather.current?.current.seaSurfaceTemperature} ${marineWeather.currentunits?.currentunits.seaSurfaceTemperature}", // Static or from another source
               windSpeed: "${(weather.current?.current.windSpeed)} m/s",
             ),
             const SizedBox(height: 20),
@@ -260,12 +262,10 @@ class HomepageState extends State<Homepage> {
         );
 
         if (selectedFishes != null && selectedFishes.isNotEmpty) {
-          // Update search bar with selected fish names
-          String selectedFishNames =
-              selectedFishes.map((fish) => fish.localName).join(", ");
+          // Update searchText with selected fish names
+          String selectedFishNames = selectedFishes.map((fish) => fish.localName).join(", ");
           setState(() {
-            searchText =
-                selectedFishNames; // Assuming `searchText` is a state variable
+            searchText = selectedFishNames; // Update state to trigger UI rebuild
           });
         }
       },
@@ -274,20 +274,16 @@ class HomepageState extends State<Homepage> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 4),
-          ],
+          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 4)],
         ),
         child: Row(
           children: [
-            Icon(Icons.search, color: Colors.grey, size: 20),
-            SizedBox(width: 8),
+            const Icon(Icons.search, color: Colors.grey, size: 20),
+            const SizedBox(width: 8),
             Expanded(
               child: Text(
-                searchText.isNotEmpty
-                    ? searchText
-                    : "Search for specific fishes...",
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+                searchText.isNotEmpty ? searchText : "Search for specific fishes...",
+                style: const TextStyle(fontSize: 14, color: Colors.grey),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -390,10 +386,11 @@ class HomepageState extends State<Homepage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => FishingAreaNearby(
-                          selectedGear: selectedGear,
-                          selectedFishes: searchText,
-                        )),
+                  builder: (context) => FishingAreaNearby(
+                    selectedGear: selectedGear,
+                    selectedFishes: searchText,
+                  ),
+                ),
               );
             },
             style: ElevatedButton.styleFrom(
@@ -404,9 +401,9 @@ class HomepageState extends State<Homepage> {
               ),
               elevation: 3,
             ),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(Icons.location_on, color: Colors.white, size: 22),
                 SizedBox(width: 10),
                 Text(

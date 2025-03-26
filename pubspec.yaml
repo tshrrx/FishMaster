@@ -12,7 +12,6 @@ dependencies:
   flutter:
     sdk: flutter
   iconsax: ^0.0.8
-  font_awesome_flutter: ^10.8.0
   cupertino_icons: ^1.0.8
   carousel_slider: ^5.0.0
   geocoding: ">1.0.0 <2.3.0-beta"
@@ -22,6 +21,15 @@ dependencies:
   http: ^1.3.0
   intl: ^0.20.2
   get:
+  font_awesome_flutter: ^10.8.0
+  google_generative_ai: ^0.4.6
+  shared_preferences: ^2.5.2
+  flutter_compass: ^0.8.1
+  firebase_core: ^3.12.1
+  firebase_auth: ^5.5.1
+  cloud_firestore: ^5.6.5
+
+
 
 
 dev_dependencies:
@@ -36,6 +44,9 @@ flutter:
       - assets/logos/
       - assets/images/
       - assets/response4.json
+      - assets/port_icon.png
+      - assets/ports.json
+      - assets/gear_time.json
 
 
   fonts:

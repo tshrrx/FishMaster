@@ -18,13 +18,9 @@ class GlobalController extends GetxController {
   final marineweatherData = MarineWeatherData().obs;
   final weatherData = WeatherData().obs;
 
-  WeatherData getData() {
-    return weatherData.value;
-  }
-
-  MarineWeatherData getMarineData() {
-    return marineweatherData.value;
-  }
+  // ✅ Fixed: Use getter properties instead of missing methods
+  WeatherData get weather => weatherData.value;
+  MarineWeatherData get marine => marineweatherData.value;
 
   @override
   void onInit() {
@@ -55,7 +51,7 @@ class GlobalController extends GetxController {
           accuracy: LocationAccuracy.high,
         ),
       );
-      print("Raw Position Data: \$position");
+      print("Raw Position Data: $position");
 
       lat.value = position.latitude;
       long.value = position.longitude;
@@ -74,7 +70,6 @@ class GlobalController extends GetxController {
         print("Weather API Error: $e");
       }
 
-      // Fetch marine data with error handling
       try {
         var marine = await fetchAPI.fetchMarineData(lat.value, long.value);
         if (marine != null) {
@@ -89,7 +84,7 @@ class GlobalController extends GetxController {
 
       isLoading.value = false;
     } catch (e) {
-      print("Error fetching location: \$egc");
+      print("Error fetching location: $e");
     }
   }
 }

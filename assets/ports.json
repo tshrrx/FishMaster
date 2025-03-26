@@ -1,0 +1,22 @@
+[
+    {"id": 1, "name": "Chennai Fishing Harbour", "lat": 13.1, "lon": 80.4},
+    {"id": 2, "name": "Tuticorin Fishing Harbour", "lat": 8.8, "lon": 78.1},
+    {"id": 3, "name": "Chinnamuttam Fishing Harbour", "lat": 8.1, "lon": 77.5},
+    {"id": 4, "name": "Mallipattinam Fishing Harbour", "lat": 10.3, "lon": 79.3},
+    {"id": 5, "name": "Mandapam Fishing Harbour", "lat": 9.3, "lon": 79.1},
+    {"id": 6, "name": "Nagapattinam Fishing Harbour", "lat": 10.8, "lon": 79.8},
+    {"id": 7, "name": "Cuddalore Fishing Harbour", "lat": 11.7, "lon": 79.8},
+    {"id": 8, "name": "Pazhayar Fishing Harbour", "lat": 11.5, "lon": 79.8},
+    {"id": 9, "name": "Colachel Fishing Harbour", "lat": 8.2, "lon": 77.2},
+    {"id": 10, "name": "Royapuram Fishing Harbour", "lat": 13.1, "lon": 80.3},
+    {"id": 11, "name": "Poompuhar Fishing Port", "lat": 11.1, "lon": 79.8},
+    {"id": 12, "name": "Thoothukudi (Tuticorin) Old Port", "lat": 8.8, "lon": 78.1},
+    {"id": 13, "name": "Kanyakumari Port", "lat": 8.1, "lon": 77.5},
+    {"id": 14, "name": "Rameswaram Port", "lat": 9.3, "lon": 79.3},
+    {"id": 15, "name": "Kottaipattinam Fishing Port", "lat": 10.1, "lon": 79.2},
+    {"id": 16, "name": "Valinokkam Fishing Port", "lat": 9.2, "lon": 78.9},
+    {"id": 17, "name": "Ennore Port (Minor Fishing Activities)", "lat": 13.2, "lon": 80.3},
+    {"id": 18, "name": "Muttom Fishing Port", "lat": 8.1, "lon": 77.3},
+    {"id": 19, "name": "Kodiyakarai Fishing Port", "lat": 10.3, "lon": 79.9},
+    {"id": 20, "name": "Uvari Fishing Port", "lat": 8.4, "lon": 77.9}
+]
