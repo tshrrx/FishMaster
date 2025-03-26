@@ -3,7 +3,13 @@ import 'package:fishmaster/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:get/get.dart';
-import 'package:fishmaster/features/authentication/screens/signup/otp.dart';
+import 'package:fishmaster/features/authentication/screens/login/login.dart';
+import 'package:firebase_core/firebase_core.dart';
+import '../../../../firebase_options.dart';
+import 'package:fishmaster/features/authentication/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -13,9 +19,70 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final AuthService _authService = AuthService();
+
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+
+
+
+
+
+
+  Future<User?> _signUp() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final firstName = _firstNameController.text.trim();
+    final lastName = _lastNameController.text.trim();
+    final username = _usernameController.text.trim();
+
+    try {
+      User? user = await _authService.signUp(email, password);
+
+      if (user != null) {
+        try {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .set({
+            'firstName': firstName,
+            'lastName': lastName,
+            'username': username,
+            'email': email,
+            'createdAt': FieldValue.serverTimestamp(),
+          });
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Sign-up successful!")),
+          );
+          return user;
+
+        } catch (e) {
+          print('Firestore Error: $e');
+          await user.delete();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Failed to save user data: ${e.toString()}")),
+          );
+          return null;
+        }
+      }
+    } catch (e) {
+      print('Authentication Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Sign-up failed: ${e.toString()}")),
+      );
+      return null;
+    }
+    return null;
+  }
+
+
   final GlobalController globalController =
       Get.put(GlobalController(), permanent: true);
-  bool _isChecked = false; // Checkbox state
+  bool _isChecked = false;
 
   InputDecoration customInputDecoration(String label, IconData icon) {
     return InputDecoration(
@@ -57,6 +124,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       children: [
                         Expanded(
                           child: TextFormField(
+                            controller: _firstNameController,
                             decoration: customInputDecoration(
                                 'First Name', Iconsax.user),
                           ),
@@ -64,6 +132,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         const SizedBox(width: FSizes.spaceBtwInputFields),
                         Expanded(
                           child: TextFormField(
+                            controller: _lastNameController,
                             decoration: customInputDecoration(
                                 'Last Name', Iconsax.user),
                           ),
@@ -72,11 +141,13 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     const SizedBox(height: FSizes.spaceBtwInputFields),
                     TextFormField(
+                      controller: _usernameController,
                       decoration:
                           customInputDecoration('Username', Iconsax.user_edit),
                     ),
                     const SizedBox(height: FSizes.spaceBtwInputFields),
                     TextFormField(
+                      controller: _emailController,
                       decoration:
                           customInputDecoration('E-Mail', Iconsax.direct),
                     ),
@@ -87,6 +158,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     const SizedBox(height: FSizes.spaceBtwInputFields),
                     TextFormField(
+                      controller: _passwordController,
                       obscureText: true,
                       decoration: customInputDecoration(
                               'Password', Iconsax.password_check)
@@ -151,9 +223,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
-                          Get.to(() => OTPVerificationScreen());
-                        },
+                          onPressed: () async {
+                            final user = await _signUp();
+                            if (user != null) {
+                              Get.to(() => LoginScreen());
+                            }
+                          },
                         child: const Text("Create Account"),
                       ),
                     ),
@@ -211,3 +286,4 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 }
+//before store

@@ -1,0 +1,88 @@
+import 'package:geolocator/geolocator.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'dart:math';
+import 'dart:async';
+
+class LatLng {
+  final double latitude;
+  final double longitude;
+
+  const LatLng(this.latitude, this.longitude);
+
+  @override
+  String toString() => 'LatLng($latitude, $longitude)';
+}
+
+class GeofenceService extends GetxService {
+  StreamSubscription<Position>? _positionSubscription;
+  bool _wasNearBorder = false;
+  bool _wasOutside = false;
+  bool _wasInRestrictedArea = false;
+
+  // Maritime border coordinates (Sri Lanka)
+  final List<LatLng> borderCoordinates = [
+    LatLng(9.959844, 79.826441), LatLng(9.800999, 79.563088),
+    // ... keep your existing coordinates ...
+    LatLng(10.05, 80.03)
+  ];
+
+  // Restricted areas (Gulf of Mannar)
+  final List<List<LatLng>> restrictedAreas = [
+    [
+      LatLng(9.40, 78.50),
+      // ... keep your existing restricted area points ...
+      LatLng(9.00, 78.00),
+    ],
+  ];
+
+  /// Initialize the service
+  Future<GeofenceService> init() async {
+    await _checkLocationPermission();
+    return this;
+  }
+
+  /// Check and request location permissions
+  Future<void> _checkLocationPermission() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await _showServiceDisabledWarning();
+      return;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        await _showPermissionDeniedWarning();
+        return;
+      }
+    }
+    _startLocationUpdates();  // Now properly defined below
+  }
+
+  /// Add the missing method
+  void _startLocationUpdates() {
+    _positionSubscription = Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.bestForNavigation,
+        distanceFilter: 50,
+      ),
+    ).listen((Position position) {
+      _handleNewPosition(position);
+    }, onError: (error) {
+      _showLocationError(error.toString());
+    });
+  }
+
+  /// Rest of your existing code remains the same
+  /// [isPointInPolygon], [computeMinDistanceToBorder], etc...
+  /// Keep all your existing alert methods and polygon calculations
+
+  @override
+  void onClose() {
+    _positionSubscription?.cancel();
+    super.onClose();
+  }
+}

@@ -1,28 +1,25 @@
-import 'package:fishmaster/features/Activities/fish_name_string/tamilfish.dart';
 import 'package:flutter/material.dart';
+import 'package:fishmaster/features/Activities/fish_name_string/TamilFish.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
   @override
   _SearchPageState createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
-  List<TamilFish> filteredFishList = fishList;
-  List<TamilFish> selectedFishes = [];
+  List<TamilFish> filteredFishList = fishList; // Full list
+  List<TamilFish> selectedFishes = []; // Store selected fishes
 
   void _filterFish(String query) {
     setState(() {
       filteredFishList = query.isEmpty
           ? fishList
           : fishList
-              .where((fish) =>
-                  fish.localName.toLowerCase().contains(query.toLowerCase()) ||
-                  fish.scientificName
-                      .toLowerCase()
-                      .contains(query.toLowerCase()))
-              .toList();
+          .where((fish) =>
+      fish.localName.toLowerCase().contains(query.toLowerCase()) ||
+          fish.scientificName.toLowerCase().contains(query.toLowerCase()))
+          .toList();
     });
   }
 
@@ -85,7 +82,7 @@ class _SearchPageState extends State<SearchPage> {
                           height: 100,
                           decoration: BoxDecoration(
                             borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(10)),
+                            BorderRadius.vertical(top: Radius.circular(10)),
                             image: DecorationImage(
                               image: AssetImage(fish.imagePath),
                               fit: BoxFit.cover,

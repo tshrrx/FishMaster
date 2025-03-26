@@ -2,9 +2,16 @@ import 'package:fishmaster/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fishmaster/features/authentication/auth_service.dart';
+import 'package:fishmaster/features/Activities/controller/homescreen.dart';
+import 'package:fishmaster/features/authentication/screens/signup/signup.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -12,6 +19,88 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _isChecked = false; // Checkbox state
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final AuthService _authService = AuthService();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedPreferences();
+  }
+
+  Future<void> _loadSavedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isChecked = prefs.getBool('remember_me') ?? false;
+      if (_isChecked) {
+        _emailController.text = prefs.getString('remembered_email') ?? '';
+      }
+    });
+  }
+
+  void _signIn() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please fill in all fields")),
+      );
+      return;
+    }
+
+    try {
+      final user = await _authService.signIn(email, password);
+      if (user != null && mounted) {
+        final prefs = await SharedPreferences.getInstance(); // Add this line
+        if (_isChecked) {
+          await prefs.setBool('remember_me', true);
+          await prefs.setString('remembered_email', email);
+        } else {
+          await prefs.setBool('remember_me', false);
+          await prefs.remove('remembered_email');
+        }
+        Get.to(() => HomeScreen());
+      }
+    }on FirebaseAuthException catch (e) {
+      _handleAuthError(e);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${e.toString()}")),
+      );
+    }
+  }
+
+  void _handleAuthError(FirebaseAuthException e) {
+    String message;
+    switch (e.code) {
+      case 'invalid-email':
+        message = "Invalid email format";
+        break;
+      case 'user-disabled':
+        message = "Account disabled";
+        break;
+      case 'user-not-found':
+        message = "Account not found";
+        break;
+      case 'wrong-password':
+        message = "Incorrect password";
+        break;
+      default:
+        message = "Login failed: ${e.message}";
+    }
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+
 
   InputDecoration customInputDecoration(String label, IconData icon) {
     return InputDecoration(
@@ -68,6 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       // Email
                       TextFormField(
+                        controller: _emailController,
                         decoration: customInputDecoration(
                             "Email", Iconsax.direct_right),
                       ),
@@ -75,6 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       // Password
                       TextFormField(
+                        controller: _passwordController,
                         obscureText: true,
                         decoration: customInputDecoration(
                                 "Password", Iconsax.password_check)
@@ -104,15 +195,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
 
-                          // Forget Password
-                          TextButton(
-                            onPressed: () {},
-                            style: TextButton.styleFrom(
-                              foregroundColor:
-                                  const Color.fromRGBO(51, 108, 138, 1),
-                            ),
-                            child: const Text("Forget Password"),
-                          ),
                         ],
                       ),
                       const SizedBox(height: FSizes.spaceBtwSections),
@@ -121,7 +203,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: _signIn,
                           child: const Text("Sign In"),
                         ),
                       ),

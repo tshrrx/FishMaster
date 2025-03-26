@@ -1,0 +1,27 @@
+{
+  "Hook & Line": {
+    "Low Effort Zone 🔴": 12,
+    "Medium Effort Zone 🟡": 6,
+    "High Effort Zone 🟢": 1
+  },
+  "Gillnets": {
+    "Low Effort Zone 🔴": 10,
+    "Medium Effort Zone 🟡": 7,
+    "High Effort Zone 🟢": 3
+  },
+  "Longlines": {
+    "Low Effort Zone 🔴": 10,
+    "Medium Effort Zone 🟡": 8,
+    "High Effort Zone 🟢": 4
+  },
+  "Purse Seining": {
+    "Low Effort Zone 🔴": 8,
+    "Medium Effort Zone 🟡": 7,
+    "High Effort Zone 🟢": 5
+  },
+  "Trawling": {
+    "Low Effort Zone 🔴": 7,
+    "Medium Effort Zone 🟡": 5,
+    "High Effort Zone 🟢": 2
+  }
+}

@@ -1,3 +1,4 @@
+//home
 import 'package:fishmaster/controllers/global_contoller.dart';
 import 'package:fishmaster/features/Activities/fish_name_string/TamilFish.dart';
 import 'package:fishmaster/features/Activities/screen/marineweatherpage.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import '../../../models/WeatherGeneral/finalweatherData/weather_data.dart';
+import 'package:fishmaster/models/WeatherGeneral/finalweatherData/weather_data.dart';
 import 'fishing_area_nearme.dart';
 
 class Fish {
@@ -84,6 +85,7 @@ class HomepageState extends State<Homepage> {
                   "${marineWeather.current?.current.waveHeight} ${marineWeather.currentunits?.currentunits.waveHeight}",
               ssT:
                   "${marineWeather.current?.current.seaSurfaceTemperature} ${marineWeather.currentunits?.currentunits.seaSurfaceTemperature}",
+
               windSpeed: "${(weather.current?.current.windSpeed)} m/s",
             ),
             const SizedBox(height: 20),
@@ -266,7 +268,6 @@ class HomepageState extends State<Homepage> {
           context,
           MaterialPageRoute(builder: (context) => SearchPage()),
         );
-
         if (selectedFishes != null && selectedFishes.isNotEmpty) {
           String selectedFishNames =
               selectedFishes.map((fish) => fish.localName).join(", ");
@@ -287,14 +288,12 @@ class HomepageState extends State<Homepage> {
         ),
         child: Row(
           children: [
-            Icon(Icons.search, color: Colors.grey, size: 20),
-            SizedBox(width: 8),
+            const Icon(Icons.search, color: Colors.grey, size: 20),
+            const SizedBox(width: 8),
             Expanded(
               child: Text(
-                searchText.isNotEmpty
-                    ? searchText
-                    : "Search for specific fishes...",
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+                searchText.isNotEmpty ? searchText : "Search for specific fishes...",
+                style: const TextStyle(fontSize: 14, color: Colors.grey),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -397,10 +396,11 @@ class HomepageState extends State<Homepage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => FishingAreaNearby(
-                          selectedGear: selectedGear,
-                          selectedFishes: searchText,
-                        )),
+                  builder: (context) => FishingAreaNearby(
+                    selectedGear: selectedGear,
+                    selectedFishes: searchText,
+                  ),
+                ),
               );
             },
             style: ElevatedButton.styleFrom(
@@ -411,9 +411,9 @@ class HomepageState extends State<Homepage> {
               ),
               elevation: 3,
             ),
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(Icons.location_on, color: Colors.white, size: 22),
                 SizedBox(width: 10),
                 Text(

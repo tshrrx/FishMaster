@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "496211936875",
+    "project_id": "fishmaster-87f88",
+    "storage_bucket": "fishmaster-87f88.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:496211936875:android:f5a35d30f868d34c01932e",
+        "android_client_info": {
+          "package_name": "com.example.fisherio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCid0fr2uCy9JA7UN3q2a_oDwzlfsKHJZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:496211936875:android:8a9d8e178dea3d7801932e",
+        "android_client_info": {
+          "package_name": "com.example.fishmaster"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCid0fr2uCy9JA7UN3q2a_oDwzlfsKHJZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

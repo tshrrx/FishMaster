@@ -1,9 +1,11 @@
-import 'package:fishmaster/controllers/global_contoller.dart';
 import 'package:flutter/material.dart';
 import 'package:fishmaster/features/Activities/screen/homepage.dart';
 import 'package:fishmaster/features/Activities/screen/profile.dart';
 import 'package:fishmaster/features/Activities/screen/searchPage.dart';
-import 'package:get/get.dart';
+import 'package:fishmaster/features/Activities/alerts/geofence_service.dart';
+import '../screen/chatbot/chatbot.dart';
+
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,11 +15,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
-  final GlobalController globalController =
-      Get.put(GlobalController(), permanent: true);
 
-  final List<Widget> _pages = [Homepage(), SearchPage(), Profile()];
+
+
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [Homepage(), SearchPage(), ChatbotPage(), Profile()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -27,14 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (globalController.isLoading.value) {
-        return const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        );
-      }
-
-      return Scaffold(
+    GeofenceService.disableGeofence = false; // Enable geofence after login
+    return Scaffold(
         backgroundColor: Colors.grey[100],
         body: _pages[_selectedIndex],
         bottomNavigationBar: Padding(
@@ -53,14 +50,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 destinations: [
                   _buildNavItem(Icons.home, "Home", 0),
                   _buildNavItem(Icons.search, "Search", 1),
-                  _buildNavItem(Icons.person, "Profile", 2),
+                  _buildNavItem(Icons.chat, "ChatBot", 2),
+                  _buildNavItem(Icons.person, "Profile", 3),
                 ],
               ),
             ),
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 
   NavigationDestination _buildNavItem(IconData icon, String label, int index) {
@@ -68,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
       icon: Icon(
         icon,
         color: _selectedIndex == index ? Colors.white : Colors.black,
-        size: 22,
+        size: 22, // Reduced icon size
       ),
       label: label,
     );

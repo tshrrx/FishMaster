@@ -26,13 +26,9 @@ class GlobalController extends GetxController {
   final marineweatherData = MarineWeatherData().obs;
   final weatherData = WeatherData().obs;
 
-  WeatherData getData() {
-    return weatherData.value;
-  }
-
-  MarineWeatherData getMarineData() {
-    return marineweatherData.value;
-  }
+  // ✅ Fixed: Use getter properties instead of missing methods
+  WeatherData get weather => weatherData.value;
+  MarineWeatherData get marine => marineweatherData.value;
 
   @override
   void onInit() {
@@ -62,7 +58,9 @@ class GlobalController extends GetxController {
           accuracy: LocationAccuracy.high,
         ),
       );
+      
       log("Raw Position Data: $position");
+
       lat.value = position.latitude;
       long.value = position.longitude;
 

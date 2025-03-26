@@ -1,0 +1,2 @@
+D:/gdg/FishMaster/FishMaster/android/app/.cxx/Debug/672x35v2/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/gdg/FishMaster/FishMaster/android/app/.cxx/Debug/672x35v2/armeabi-v7a/CMakeFiles/rebuild_cache.dir
