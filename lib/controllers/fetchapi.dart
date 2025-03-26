@@ -16,6 +16,7 @@ import 'package:fishmaster/models/WeatherGeneral/finalweatherData/weather_curren
 import 'package:fishmaster/models/WeatherGeneral/finalweatherData/weather_daily.dart';
 import 'package:fishmaster/models/WeatherGeneral/finalweatherData/weather_data.dart';
 import 'package:fishmaster/models/WeatherGeneral/finalweatherData/weather_hourly.dart';
+import 'dart:developer';
 
 class FetchAPI {
   Future<MarineWeatherData?> fetchMarineData(double lat, double long) async {
@@ -50,13 +51,13 @@ class FetchAPI {
       var response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         var jsonString = jsonDecode(response.body);
-        print("Got response");
+        log("Got response");
         return fromJson(jsonString);
       } else {
-        print("Failed to fetch data: \${response.statusCode}");
+        log("Failed to fetch data: ${response.statusCode}");
       }
     } catch (e) {
-      print("Error fetching data: $e");
+      log("Error fetching data: $e");
     }
     return null;
   }

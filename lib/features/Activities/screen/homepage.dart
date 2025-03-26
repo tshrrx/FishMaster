@@ -1,6 +1,7 @@
 //home
 import 'package:fishmaster/controllers/global_contoller.dart';
 import 'package:fishmaster/features/Activities/fish_name_string/TamilFish.dart';
+import 'package:fishmaster/features/Activities/screen/marineweatherpage.dart';
 import 'package:fishmaster/features/Activities/screen/searchPage.dart';
 import 'package:fishmaster/models/Marine/finalmarineData/marine_data.dart';
 import 'package:fishmaster/utils/constants/day_date.dart';
@@ -49,9 +50,10 @@ class HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    WeatherData weather = globalController.weather;
-    MarineWeatherData marineWeather = globalController.marine;
-
+    WeatherData weather = globalController.getData();
+    MarineWeatherData marineWeather = globalController.getMarineData();
+    String city = globalController.getCity().value;
+    String state = globalController.getState().value;
     int timestamp = DateUtil.getCurrentTimestamp();
     String formattedDate = DateUtil.formatTimestamp(timestamp);
     return Scaffold(
@@ -75,14 +77,15 @@ class HomepageState extends State<Homepage> {
             ),
             const SizedBox(height: 30),
             _buildLocalWeather(
-              location: "Chennai, Tamil Nadu",
+              location: "$city, $state",
               date: formattedDate,
               temperature: "${weather.current?.current.temp}°C",
               rainLevel: "${weather.minutely?.minutely[0].precipitation}",
               waveHeight:
-              "${marineWeather.current?.current.waveHeight} ${marineWeather.currentunits?.currentunits.waveHeight}", // Static or from another source
+                  "${marineWeather.current?.current.waveHeight} ${marineWeather.currentunits?.currentunits.waveHeight}",
               ssT:
-              "${marineWeather.current?.current.seaSurfaceTemperature} ${marineWeather.currentunits?.currentunits.seaSurfaceTemperature}", // Static or from another source
+                  "${marineWeather.current?.current.seaSurfaceTemperature} ${marineWeather.currentunits?.currentunits.seaSurfaceTemperature}",
+
               windSpeed: "${(weather.current?.current.windSpeed)} m/s",
             ),
             const SizedBox(height: 20),
@@ -90,7 +93,7 @@ class HomepageState extends State<Homepage> {
             const SizedBox(height: 20),
             _buildGearSelectionAndLocateButton(),
             const SizedBox(height: 20),
-            _buildSectionTitle("Nearby Fishes"),
+            _buildSectionTitle("Available Fishes"),
             const SizedBox(height: 10),
             _buildCarousel(fishList),
             const SizedBox(height: 10),
@@ -215,16 +218,21 @@ class HomepageState extends State<Homepage> {
             ],
           ),
 
-          const SizedBox(height: 11),
+          const SizedBox(height: 16),
 
           Align(
-            alignment: Alignment.centerRight,
+            alignment: Alignment.center,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MarinePage()),
+                );
+              },
               child: const Text(
-                "More",
+                "Marine Weather",
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.blue,
                 ),
@@ -260,12 +268,12 @@ class HomepageState extends State<Homepage> {
           context,
           MaterialPageRoute(builder: (context) => SearchPage()),
         );
-
         if (selectedFishes != null && selectedFishes.isNotEmpty) {
-          // Update searchText with selected fish names
-          String selectedFishNames = selectedFishes.map((fish) => fish.localName).join(", ");
+          String selectedFishNames =
+              selectedFishes.map((fish) => fish.localName).join(", ");
           setState(() {
-            searchText = selectedFishNames; // Update state to trigger UI rebuild
+            searchText =
+                selectedFishNames;
           });
         }
       },
@@ -274,7 +282,9 @@ class HomepageState extends State<Homepage> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 4)],
+          boxShadow: [
+            BoxShadow(color: Colors.grey.withAlpha(51), blurRadius: 4),
+          ],
         ),
         child: Row(
           children: [
@@ -306,12 +316,12 @@ class HomepageState extends State<Homepage> {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: Colors.grey.shade300),
               boxShadow: [
-                BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 4)
+                BoxShadow(color: Colors.grey.withAlpha(26), blurRadius: 4)
               ],
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
-                value: selectedGear, // Bind state variable
+                value: selectedGear,
                 onChanged: (String? newValue) {
                   setState(() {
                     selectedGear = newValue!;
@@ -458,7 +468,7 @@ class HomepageState extends State<Homepage> {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.4),
+                color: Colors.black.withAlpha(102),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Column(

@@ -31,29 +31,29 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     GeofenceService.disableGeofence = false; // Enable geofence after login
-
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 0.0, left: 0.0, right: 0.0),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30.0),
-            topRight: Radius.circular(30.0),
-          ),
-          child: SizedBox(
-            child: NavigationBar(
-              selectedIndex: _selectedIndex,
-              indicatorColor: Color.fromRGBO(51, 108, 138, 1),
-              onDestinationSelected: _onItemTapped,
-              backgroundColor: Colors.white,
-              destinations: [
-                _buildNavItem(Icons.home, "Home", 0),
-                _buildNavItem(Icons.search, "Search", 1),
-                _buildNavItem(Icons.chat, "ChatBot", 2),
-                _buildNavItem(Icons.person, "Profile", 3),
-              ],
+        backgroundColor: Colors.grey[100],
+        body: _pages[_selectedIndex],
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(bottom: 0.0, left: 0.0, right: 0.0),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(30.0),
+              topRight: Radius.circular(30.0),
+            ),
+            child: SizedBox(
+              child: NavigationBar(
+                selectedIndex: _selectedIndex,
+                indicatorColor: const Color.fromRGBO(51, 108, 138, 1),
+                onDestinationSelected: _onItemTapped,
+                backgroundColor: Colors.white,
+                destinations: [
+                  _buildNavItem(Icons.home, "Home", 0),
+                  _buildNavItem(Icons.search, "Search", 1),
+                  _buildNavItem(Icons.chat, "ChatBot", 2),
+                  _buildNavItem(Icons.person, "Profile", 3),
+                ],
+              ),
             ),
           ),
         ),
