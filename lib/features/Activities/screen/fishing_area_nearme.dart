@@ -12,7 +12,7 @@ class FishingAreaNearby extends StatefulWidget {
   final String selectedGear;
   final String selectedFishes;
 
-  FishingAreaNearby({required this.selectedGear, required this.selectedFishes});
+  const FishingAreaNearby({super.key, required this.selectedGear, required this.selectedFishes});
 
   @override
   _FishingAreaNearbyState createState() => _FishingAreaNearbyState();

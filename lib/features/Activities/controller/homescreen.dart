@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[100],
         body: _pages[_selectedIndex],
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.only(bottom: 0.0, left: 0.0, right: 0.0),
@@ -45,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
               topRight: Radius.circular(30.0),
             ),
             child: SizedBox(
-              height: 60,
               child: NavigationBar(
                 selectedIndex: _selectedIndex,
                 indicatorColor: const Color.fromRGBO(51, 108, 138, 1),
