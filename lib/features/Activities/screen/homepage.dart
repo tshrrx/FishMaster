@@ -1,6 +1,6 @@
 //home
-import 'package:fishmaster/controllers/global_contoller.dart';
-import 'package:fishmaster/features/Activities/fish_name_string/TamilFish.dart';
+import 'package:fishmaster/controllers/global_controller.dart';
+import 'package:fishmaster/features/Activities/fish_name_string/tamilfish.dart';
 import 'package:fishmaster/features/Activities/screen/marineweatherpage.dart';
 import 'package:fishmaster/features/Activities/screen/searchPage.dart';
 import 'package:fishmaster/models/Marine/finalmarineData/marine_data.dart';
@@ -72,21 +72,23 @@ class HomepageState extends State<Homepage> {
           padding: const EdgeInsets.all(16),
           children: [
             _buildUserInfo(
-              name: "Tejas Balkhande",
+              name: "Fishermen",
               message: "It's a great day to go fishing!",
             ),
             const SizedBox(height: 30),
             _buildLocalWeather(
               location: "$city, $state",
-              date: formattedDate,
-              temperature: "${weather.current?.current.temp}°C",
-              rainLevel: "${weather.minutely?.minutely[0].precipitation}",
-              waveHeight:
-                  "${marineWeather.current?.current.waveHeight} ${marineWeather.currentunits?.currentunits.waveHeight}",
-              ssT:
-                  "${marineWeather.current?.current.seaSurfaceTemperature} ${marineWeather.currentunits?.currentunits.seaSurfaceTemperature}",
-
-              windSpeed: "${(weather.current?.current.windSpeed)} m/s",
+                date: formattedDate,
+                temperature:
+                "${weather.current?.current.temp?.toStringAsFixed(1) ?? 'N/A'}°C",
+                rainLevel:
+                "${weather.minutely?.minutely.firstOrNull?.precipitation ?? 'N/A'}",
+                waveHeight:
+                "${marineWeather.current?.current.waveHeight?.toStringAsFixed(1) ?? 'N/A'} ${marineWeather.currentunits?.currentunits.waveHeight ?? ''}",
+                ssT:
+                "${marineWeather.current?.current.seaSurfaceTemperature?.toStringAsFixed(1) ?? 'N/A'} ${marineWeather.currentunits?.currentunits.seaSurfaceTemperature ?? ''}",
+                windSpeed:
+                "${weather.current?.current.windSpeed?.toStringAsFixed(1) ?? 'N/A'} m/s",
             ),
             const SizedBox(height: 20),
             _buildSearchBar(context),
@@ -151,7 +153,7 @@ class HomepageState extends State<Homepage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withAlpha(51),
             blurRadius: 6,
             offset: const Offset(2, 2),
           ),
@@ -269,11 +271,8 @@ class HomepageState extends State<Homepage> {
           MaterialPageRoute(builder: (context) => SearchPage()),
         );
         if (selectedFishes != null && selectedFishes.isNotEmpty) {
-          String selectedFishNames =
-              selectedFishes.map((fish) => fish.localName).join(", ");
           setState(() {
-            searchText =
-                selectedFishNames;
+            searchText = selectedFishes.map((fish) => fish.localName).join(", ");
           });
         }
       },

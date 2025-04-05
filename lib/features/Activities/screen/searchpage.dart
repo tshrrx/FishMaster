@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:fishmaster/features/Activities/fish_name_string/TamilFish.dart';
 
 class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
+
   @override
-  _SearchPageState createState() => _SearchPageState();
+  SearchPageState createState() => SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
   List<TamilFish> filteredFishList = fishList; // Full list
   List<TamilFish> selectedFishes = []; // Store selected fishes
@@ -16,10 +18,12 @@ class _SearchPageState extends State<SearchPage> {
       filteredFishList = query.isEmpty
           ? fishList
           : fishList
-          .where((fish) =>
-      fish.localName.toLowerCase().contains(query.toLowerCase()) ||
-          fish.scientificName.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+              .where((fish) =>
+                  fish.localName.toLowerCase().contains(query.toLowerCase()) ||
+                  fish.scientificName
+                      .toLowerCase()
+                      .contains(query.toLowerCase()))
+              .toList();
     });
   }
 
@@ -82,7 +86,7 @@ class _SearchPageState extends State<SearchPage> {
                           height: 100,
                           decoration: BoxDecoration(
                             borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(10)),
+                                BorderRadius.vertical(top: Radius.circular(10)),
                             image: DecorationImage(
                               image: AssetImage(fish.imagePath),
                               fit: BoxFit.cover,
@@ -108,11 +112,19 @@ class _SearchPageState extends State<SearchPage> {
           if (selectedFishes.isNotEmpty)
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context, selectedFishes); // Pass data back
-                },
-                child: Text("Select (${selectedFishes.length}) Fishes"),
+              child: Center(
+                child: SizedBox(
+                  width: 250,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context, selectedFishes);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text("Select Fishes (${selectedFishes.length})"),
+                    ),
+                  ),
+                ),
               ),
             ),
         ],

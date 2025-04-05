@@ -18,10 +18,10 @@ class FishingAreaNearby extends StatefulWidget {
   const FishingAreaNearby({super.key, required this.selectedGear, required this.selectedFishes});
 
   @override
-  _FishingAreaNearbyState createState() => _FishingAreaNearbyState();
+  FishingAreaNearbyState createState() => FishingAreaNearbyState();
 }
 
-class _FishingAreaNearbyState extends State<FishingAreaNearby> {
+class FishingAreaNearbyState extends State<FishingAreaNearby> {
 
 
   bool _showHeatmap = true;
@@ -282,7 +282,9 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
     if (permission == LocationPermission.whileInUse ||
         permission == LocationPermission.always) {
       Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+          locationSettings: LocationSettings(
+            accuracy: LocationAccuracy.high,
+          ),);
       setState(() {
         _userLocation = LatLng(position.latitude, position.longitude);
       });
@@ -341,11 +343,11 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
       double distance = _calculateDistance(_userLocation!, circle.center);
 
       if (distance <= circle.radius / 1000) { // Convert radius from meters to km
-        if (circle.fillColor == Colors.red.withOpacity(0.3)) {
+        if (circle.fillColor == Colors.red.withAlpha(76)) {
           return "Low Effort Zone 🔴";
-        } else if (circle.fillColor == Colors.yellow.withOpacity(0.3)) {
+        } else if (circle.fillColor == Colors.yellow.withAlpha(76)) {
           return "Medium Effort Zone 🟡";
-        } else if (circle.fillColor == Colors.green.withOpacity(0.3)) {
+        } else if (circle.fillColor == Colors.green.withAlpha(76)) {
           return "High Effort Zone 🟢";
         }
       }
@@ -431,7 +433,7 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
       String jsonString = await rootBundle.loadString('assets/ports.json');
       List<dynamic> portList = json.decode(jsonString);
 
-      BitmapDescriptor portIcon = await BitmapDescriptor.fromAssetImage(
+      BitmapDescriptor portIcon = await BitmapDescriptor.asset(
         ImageConfiguration(size: Size(8, 8)),
         'assets/port_icon.png',
       );
@@ -485,14 +487,15 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
         // Create multiple circles per fishing effort record for a heatmap effect
         for (int i = 0; i < 3; i++) {
           double factor = (i + 1) * 1.5;
-          double opacity = (0.3 - (i * 0.1)).clamp(0.1, 0.3);
+          double opacity = 255*(0.3 - (i * 0.1)).clamp(0.1, 0.3);
 
           circles.add(
             Circle(
               circleId: CircleId('$lat,$lon-$i'),
               center: LatLng(lat, lon),
               radius: (500 + (hours * 40)) * factor,
-              fillColor: baseColor.withOpacity(opacity),
+              fillColor: baseColor.withAlpha(opacity.toInt()),
+
               strokeColor: Colors.transparent,
             ),
           );
@@ -674,7 +677,7 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // Reduce padding
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.8), // Reduce opacity
+                        color: Colors.white.withAlpha(204), // Reduce opacity
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2)),
@@ -874,7 +877,9 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
           if (permission == LocationPermission.whileInUse ||
               permission == LocationPermission.always) {
             Position position = await Geolocator.getCurrentPosition(
-                desiredAccuracy: LocationAccuracy.high);
+                locationSettings: LocationSettings(
+                  accuracy: LocationAccuracy.high,
+                ),);
             _mapController?.animateCamera(
               CameraUpdate.newLatLng(
                 LatLng(position.latitude, position.longitude),
@@ -888,5 +893,3 @@ class _FishingAreaNearbyState extends State<FishingAreaNearby> {
     );
   }
 }
-
-//saved
