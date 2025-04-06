@@ -89,11 +89,10 @@ class ChatbotPageState extends State<ChatbotPage> {
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
-          'assets/logos/fisher.png',
+          'assets/logos/applogo.png',
           height: 60,
         ),
         backgroundColor: Colors.white,
-        elevation: 1,
         centerTitle: true,
       ),
       backgroundColor: Colors.white,
@@ -114,7 +113,7 @@ class ChatbotPageState extends State<ChatbotPage> {
                     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                     constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
                     decoration: BoxDecoration(
-                      color: isUser ? Color.fromRGBO(51, 108, 138, 1) : Colors.grey[300],
+                      color: isUser ? Color.fromRGBO(16, 81, 171, 1.0) : Colors.grey[300],
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(15),
                         topRight: Radius.circular(15),
@@ -152,7 +151,7 @@ class ChatbotPageState extends State<ChatbotPage> {
                         color: Color.fromRGBO(51, 108, 138, 0.1),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: Color.fromRGBO(51, 108, 138, 0.3),
+                          color: Color.fromRGBO(16, 81, 171, 1.0),
                           width: 1,
                         ),
                       ),
@@ -160,7 +159,7 @@ class ChatbotPageState extends State<ChatbotPage> {
                         child: Text(
                           _suggestions[index],
                           style: TextStyle(
-                            color: Color.fromRGBO(51, 108, 138, 1),
+                            color: Color.fromRGBO(16, 81, 171, 1.0),
                             fontSize: 13,
                           ),
                         ),
@@ -195,7 +194,7 @@ class ChatbotPageState extends State<ChatbotPage> {
                 GestureDetector(
                   onTap: _sendMessage,
                   child: CircleAvatar(
-                    backgroundColor: Color.fromRGBO(51, 108, 138, 1),
+                    backgroundColor: Color.fromRGBO(16, 81, 171, 1.0),
                     radius: 24,
                     child: Icon(Icons.send, color: Colors.white),
                   ),

@@ -44,14 +44,13 @@ class HomepageState extends State<Homepage> {
     int timestamp = DateUtil.getCurrentTimestamp();
     String formattedDate = DateUtil.formatTimestamp(timestamp);
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Image.asset(
-          'assets/logos/fisher.png',
+          'assets/logos/applogo.png',
           height: 60,
         ),
         backgroundColor: Colors.white,
-        elevation: 1,
         centerTitle: true,
       ),
       body: SafeArea(
@@ -103,21 +102,21 @@ class HomepageState extends State<Homepage> {
               style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
-                  color: Colors.blueGrey),
+                  color: Colors.black87),
             ),
             Text(
               name,
               style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w600,
-                  color: Colors.blueGrey),
+                  color: Color.fromRGBO(16, 81, 171, 1.0)),
             ),
           ],
         ),
         const SizedBox(height: 8),
         Text(
           message,
-          style: const TextStyle(fontSize: 14, color: Colors.black54),
+          style: const TextStyle(fontSize: 14, color: Colors.black87),
         ),
       ],
     );
@@ -139,7 +138,7 @@ class HomepageState extends State<Homepage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withAlpha(51),
+            color: Color.fromRGBO(16, 81, 171, 1.0),
             blurRadius: 6,
             offset: const Offset(2, 2),
           ),
@@ -157,7 +156,7 @@ class HomepageState extends State<Homepage> {
                 style: const TextStyle(
                   fontSize: 20, // Increased font size
                   fontWeight: FontWeight.bold,
-                  color: Colors.blueGrey,
+                  color: Color.fromRGBO(16, 81, 171, 1.0),
                 ),
               ),
               const SizedBox(height: 4), // Spacing between location and date
@@ -165,7 +164,7 @@ class HomepageState extends State<Homepage> {
                 date,
                 style: const TextStyle(
                   fontSize: 16, // Slightly larger for better visibility
-                  color: Colors.black54,
+                  color: Colors.black,
                 ),
               ),
             ],
@@ -225,7 +224,7 @@ class HomepageState extends State<Homepage> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue,
+                      color: Color.fromRGBO(16, 81, 171, 1.0),
                     ),
                   ),
                   SizedBox(width: 4),
@@ -242,7 +241,7 @@ class HomepageState extends State<Homepage> {
   Widget _buildWeatherInfo(IconData icon, String label, String value) {
     return Column(
       children: [
-        Icon(icon, size: 22, color: Colors.blueGrey),
+        Icon(icon, size: 22, color: Color.fromRGBO(16, 81, 171, 1.0)),
         const SizedBox(height: 4),
         Text(
           value,
@@ -277,19 +276,19 @@ class HomepageState extends State<Homepage> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
-            BoxShadow(color: Colors.grey.withAlpha(51), blurRadius: 4),
+            BoxShadow(color: Color.fromRGBO(16, 81, 171, 1.0).withAlpha(51), blurRadius: 6),
           ],
         ),
         child: Row(
           children: [
-            const Icon(Icons.search, color: Colors.grey, size: 20),
+            const Icon(Icons.search, color: Color.fromRGBO(16, 81, 171, 1.0), size: 20),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
                 searchText.isNotEmpty
                     ? searchText
                     : "Search for specific fishes...",
-                style: const TextStyle(fontSize: 14, color: Colors.grey),
+                style: const TextStyle(fontSize: 14, color: Color.fromRGBO(16, 81, 171, 1.0)),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -323,8 +322,8 @@ class HomepageState extends State<Homepage> {
                     selectedGear = newValue!;
                   });
                 },
-                style: const TextStyle(fontSize: 16, color: Colors.blueGrey),
-                icon: const Icon(Icons.arrow_drop_down, color: Colors.blueGrey),
+                style: const TextStyle(fontSize: 16, color: Color.fromRGBO(16, 81, 171, 1.0)),
+                icon: const Icon(Icons.arrow_drop_down, color: Color.fromRGBO(16, 81, 171, 1.0)),
                 isExpanded: true,
                 items: [
                   DropdownMenuItem(
@@ -332,7 +331,7 @@ class HomepageState extends State<Homepage> {
                     child: Row(
                       children: const [
                         FaIcon(FontAwesomeIcons.fish,
-                            color: Colors.blueGrey, size: 20),
+                            color: Color.fromRGBO(16, 81, 171, 1.0), size: 20),
                         SizedBox(width: 8),
                         Text("Hook & Line", style: TextStyle(fontSize: 16)),
                       ],
@@ -342,7 +341,7 @@ class HomepageState extends State<Homepage> {
                     value: "Gillnets",
                     child: Row(
                       children: const [
-                        Icon(Icons.grid_3x3, color: Colors.blueGrey, size: 20),
+                        Icon(Icons.grid_3x3, color: Color.fromRGBO(16, 81, 171, 1.0), size: 20),
                         SizedBox(width: 8),
                         Text("Gillnets", style: TextStyle(fontSize: 16)),
                       ],
@@ -353,7 +352,7 @@ class HomepageState extends State<Homepage> {
                     child: Row(
                       children: const [
                         Icon(Icons.line_weight,
-                            color: Colors.blueGrey, size: 20),
+                            color: Color.fromRGBO(16, 81, 171, 1.0), size: 20),
                         SizedBox(width: 8),
                         Text("Longlines", style: TextStyle(fontSize: 16)),
                       ],
@@ -364,7 +363,7 @@ class HomepageState extends State<Homepage> {
                     child: Row(
                       children: const [
                         Icon(Icons.directions_boat,
-                            color: Colors.blueGrey, size: 20),
+                            color: Color.fromRGBO(16, 81, 171, 1.0), size: 20),
                         SizedBox(width: 8),
                         Text("Trawling", style: TextStyle(fontSize: 16)),
                       ],
@@ -374,7 +373,7 @@ class HomepageState extends State<Homepage> {
                     value: "Purse Seining",
                     child: Row(
                       children: const [
-                        Icon(Icons.anchor, color: Colors.blueGrey, size: 20),
+                        Icon(Icons.anchor, color: Color.fromRGBO(16, 81, 171, 1.0), size: 20),
                         SizedBox(width: 8),
                         Text("Purse Seining", style: TextStyle(fontSize: 16)),
                       ],
@@ -400,7 +399,7 @@ class HomepageState extends State<Homepage> {
               );
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF336C8A),
+              backgroundColor: Color.fromRGBO(16, 81, 171, 1.0),
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -433,7 +432,7 @@ class HomepageState extends State<Homepage> {
       child: Text(
         title,
         style: const TextStyle(
-            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blueGrey),
+            fontSize: 16, fontWeight: FontWeight.bold, color:Colors.black87),
       ),
     );
   }
@@ -443,7 +442,7 @@ class HomepageState extends State<Homepage> {
       itemCount: fishList.length,
       options: CarouselOptions(
         autoPlay: true,
-        autoPlayInterval: const Duration(seconds: 3),
+        autoPlayInterval: const Duration(seconds: 5),
         autoPlayAnimationDuration: const Duration(milliseconds: 800),
         height: 180.0,
         enlargeCenterPage: true,

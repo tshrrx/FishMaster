@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 60,
                 child: NavigationBar(
                   selectedIndex: _selectedIndex,
-                  indicatorColor: const Color.fromRGBO(51, 108, 138, 1),
+                  indicatorColor: const Color.fromRGBO(16, 81, 171, 1.0),
                   onDestinationSelected: _onItemTapped,
                   backgroundColor: Colors.white,
                   destinations: [

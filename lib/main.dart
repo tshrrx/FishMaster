@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:fishmaster/controllers/global_controller.dart';
 import 'package:fishmaster/features/Activities/alerts/geofence_service.dart';
 import 'package:fishmaster/features/Activities/controller/homescreen.dart';
-import 'package:fishmaster/utils/theme/theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -16,7 +16,7 @@ void main() async {
 // Create a permanent solve for this later (Prolly resource and permission check.)
 
 Future<void> _initializeAppWithRetry({
-  int maxRetries = 4,
+  int maxRetries = 8,
   int initialDelaySeconds = 1,
 }) async {
   int attempt = 0;
@@ -84,9 +84,6 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
-      theme: FAppTheme.lightTheme,
-      darkTheme: FAppTheme.darkTheme,
       home: FutureBuilder(
         future: Future.delayed(Duration(seconds: 2)), // Minimum splash time
         builder: (context, snapshot) {

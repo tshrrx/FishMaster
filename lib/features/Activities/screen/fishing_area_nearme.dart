@@ -616,7 +616,7 @@ class FishingAreaNearbyState extends State<FishingAreaNearby> {
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
-          'assets/logos/fisher.png',
+          'assets/logos/applogo.png',
           height: 50,
         ),
         backgroundColor: Colors.white,
@@ -737,7 +737,7 @@ class FishingAreaNearbyState extends State<FishingAreaNearby> {
                           });
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromRGBO(51, 108, 138, 1),
+                          backgroundColor: Color.fromRGBO(16, 81, 171, 1.0),
                           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -787,7 +787,7 @@ class FishingAreaNearbyState extends State<FishingAreaNearby> {
                           TextSpan(
                             text: "Fishing Gear: ",
                             style: TextStyle(
-                              color: Color.fromRGBO(51, 108, 138, 1),
+                              color: Color.fromRGBO(16, 81, 171, 1.0),
                             ),
                           ),
                           TextSpan(
@@ -806,7 +806,7 @@ class FishingAreaNearbyState extends State<FishingAreaNearby> {
                         Switch(
                           value: _showHeatmap,
                           activeColor:
-                          Color.fromRGBO(51, 108, 138, 1),
+                          Color.fromRGBO(16, 81, 171, 1.0),
                           materialTapTargetSize:
                           MaterialTapTargetSize.shrinkWrap,
                           onChanged: (bool value) {
@@ -844,7 +844,7 @@ class FishingAreaNearbyState extends State<FishingAreaNearby> {
 
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
-                      Color.fromRGBO(51, 108, 138, 1),
+                      Color.fromRGBO(16, 81, 171, 1.0),
                       padding: EdgeInsets.symmetric(
                           horizontal: 50, vertical: 15),
                       shape: RoundedRectangleBorder(
@@ -887,7 +887,7 @@ class FishingAreaNearbyState extends State<FishingAreaNearby> {
             );
           }
         },
-        backgroundColor: Color.fromRGBO(51, 108, 138, 1),
+        backgroundColor: Color.fromRGBO(16, 81, 171, 1.0),
         child: Icon(Icons.my_location, color: Colors.white),
       ),
     );
