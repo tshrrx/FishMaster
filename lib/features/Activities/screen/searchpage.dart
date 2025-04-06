@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fishmaster/features/Activities/fish_name_string/TamilFish.dart';
+import 'package:fishmaster/features/Activities/fish_name_string/tamilfish.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -111,17 +111,22 @@ class SearchPageState extends State<SearchPage> {
           ),
           if (selectedFishes.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: EdgeInsets.only(
+                left: 12.0,
+                right: 12.0,
+                top: 8.0,
+                bottom: MediaQuery.of(context).padding.bottom + 1.0,
+              ),
               child: Center(
                 child: SizedBox(
-                  width: 250,
+                  width: 220,
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context, selectedFishes);
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text("Select Fishes (${selectedFishes.length})"),
+                      padding: const EdgeInsets.symmetric(vertical:6.0),
+                      child: Text("Select Fishes: (${selectedFishes.length})"),
                     ),
                   ),
                 ),

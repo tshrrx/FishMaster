@@ -15,11 +15,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final GlobalController globalController = Get.put(GlobalController(), permanent: true);
+  final GlobalController globalController =
+      Get.put(GlobalController(), permanent: true);
   int _selectedIndex = 0;
   DateTime? currentBackPressTime;
 
-  final List<Widget> _pages = [Homepage(), ChatbotPage(), Profile()];
+  final List<Widget> _pages = [
+    Homepage(),
+    ChatbotPage(),
+    Profile(),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -47,7 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           DateTime now = DateTime.now();
           if (currentBackPressTime == null ||
-              now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+              now.difference(currentBackPressTime!) >
+                  const Duration(seconds: 2)) {
             currentBackPressTime = now;
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(

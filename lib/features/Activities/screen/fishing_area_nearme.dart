@@ -7,7 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
-import 'package:fishmaster/features/Activities/fish_name_string/TamilFish.dart';
+import 'package:fishmaster/features/Activities/fish_name_string/tamilfish.dart';
 import '../compass/compass_widget.dart';
 import '../compass/location_utils.dart';
 
@@ -263,9 +263,9 @@ class FishingAreaNearbyState extends State<FishingAreaNearby> {
     ).listen((Position position) {
       setState(() {
         _userLocation = LatLng(position.latitude, position.longitude);
-        _currentEffortZone = getCurrentEffortZone();// Update zone dynamically
+        _currentEffortZone = getCurrentEffortZone();
         if (_startedFishing) {
-          _updatePolyline(); // Update polyline when location changes
+          _updatePolyline();
           _checkTimeExceeded();
         }
       });

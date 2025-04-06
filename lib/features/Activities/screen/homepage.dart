@@ -1,4 +1,3 @@
-//home
 import 'package:fishmaster/controllers/global_controller.dart';
 import 'package:fishmaster/features/Activities/fish_name_string/tamilfish.dart';
 import 'package:fishmaster/features/Activities/screen/marineweatherpage.dart';
@@ -32,21 +31,9 @@ class HomepageState extends State<Homepage> {
   String selectedGear = "Hook & Line";
   String searchText = "";
 
+  List<TamilFish> allFishes = fishList;
+  // ignore: unused_field
   int _currentIndex = 0;
-  final List<Fish> fishList = [
-    Fish(
-        imageUrl: 'assets/images/Salmon.png',
-        name: 'Salmon',
-        distance: '2.5 km Away'),
-    Fish(
-        imageUrl: 'assets/images/Tuna.png',
-        name: 'Tuna',
-        distance: '3.8 km Away'),
-    Fish(
-        imageUrl: 'assets/images/Trout.png',
-        name: 'Trout',
-        distance: '1.2 km Away'),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -78,17 +65,17 @@ class HomepageState extends State<Homepage> {
             const SizedBox(height: 30),
             _buildLocalWeather(
               location: "$city, $state",
-                date: formattedDate,
-                temperature:
-                "${weather.current?.current.temp?.toStringAsFixed(1) ?? 'N/A'}°C",
-                rainLevel:
-                "${weather.minutely?.minutely.firstOrNull?.precipitation ?? 'N/A'}",
-                waveHeight:
-                "${marineWeather.current?.current.waveHeight?.toStringAsFixed(1) ?? 'N/A'} ${marineWeather.currentunits?.currentunits.waveHeight ?? ''}",
-                ssT:
-                "${marineWeather.current?.current.seaSurfaceTemperature?.toStringAsFixed(1) ?? 'N/A'} ${marineWeather.currentunits?.currentunits.seaSurfaceTemperature ?? ''}",
-                windSpeed:
-                "${weather.current?.current.windSpeed?.toStringAsFixed(1) ?? 'N/A'} m/s",
+              date: formattedDate,
+              temperature:
+                  "${weather.current?.current.temp?.toStringAsFixed(1) ?? 'N/A'}°C",
+              rainLevel:
+                  "${weather.minutely?.minutely.firstOrNull?.precipitation ?? 'N/A'}",
+              waveHeight:
+                  "${marineWeather.current?.current.waveHeight?.toStringAsFixed(1) ?? 'N/A'} ${marineWeather.currentunits?.currentunits.waveHeight ?? ''}",
+              ssT:
+                  "${marineWeather.current?.current.seaSurfaceTemperature?.toStringAsFixed(1) ?? 'N/A'} ${marineWeather.currentunits?.currentunits.seaSurfaceTemperature ?? ''}",
+              windSpeed:
+                  "${weather.current?.current.windSpeed?.toStringAsFixed(1) ?? 'N/A'} m/s",
             ),
             const SizedBox(height: 20),
             _buildSearchBar(context),
@@ -97,9 +84,8 @@ class HomepageState extends State<Homepage> {
             const SizedBox(height: 20),
             _buildSectionTitle("Available Fishes"),
             const SizedBox(height: 10),
-            _buildCarousel(fishList),
-            const SizedBox(height: 10),
-            _buildIndicator(fishList),
+            _buildCarousel(allFishes),
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -231,13 +217,20 @@ class HomepageState extends State<Homepage> {
                   MaterialPageRoute(builder: (context) => MarinePage()),
                 );
               },
-              child: const Text(
-                "Marine Weather",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue,
-                ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Marine Weather",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  SizedBox(width: 4),
+                  Icon(Icons.arrow_forward, size: 22, color: Colors.blue),
+                ],
               ),
             ),
           ),
@@ -270,9 +263,11 @@ class HomepageState extends State<Homepage> {
           context,
           MaterialPageRoute(builder: (context) => SearchPage()),
         );
+        print("Selected fishes: $selectedFishes");
         if (selectedFishes != null && selectedFishes.isNotEmpty) {
           setState(() {
-            searchText = selectedFishes.map((fish) => fish.localName).join(", ");
+            searchText =
+                selectedFishes.map((fish) => fish.localName).join(", ");
           });
         }
       },
@@ -291,7 +286,9 @@ class HomepageState extends State<Homepage> {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                searchText.isNotEmpty ? searchText : "Search for specific fishes...",
+                searchText.isNotEmpty
+                    ? searchText
+                    : "Search for specific fishes...",
                 style: const TextStyle(fontSize: 14, color: Colors.grey),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -441,24 +438,25 @@ class HomepageState extends State<Homepage> {
     );
   }
 
-  Widget _buildCarousel(List<Fish> fishList) {
+  Widget _buildCarousel(List<TamilFish> fishList) {
     return CarouselSlider.builder(
       itemCount: fishList.length,
       options: CarouselOptions(
+        autoPlay: true,
+        autoPlayInterval: const Duration(seconds: 3),
+        autoPlayAnimationDuration: const Duration(milliseconds: 800),
         height: 180.0,
         enlargeCenterPage: true,
-        // autoPlay: true,
-        // autoPlayInterval: const Duration(seconds: 3),
         onPageChanged: (index, reason) => setState(() => _currentIndex = index),
       ),
       itemBuilder: (context, index, realIndex) {
-        Fish fish = fishList[index];
+        TamilFish fish = fishList[index];
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 5.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
             image: DecorationImage(
-              image: AssetImage(fish.imageUrl),
+              image: AssetImage(fish.imagePath),
               fit: BoxFit.cover,
             ),
           ),
@@ -475,7 +473,7 @@ class HomepageState extends State<Homepage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    fish.name,
+                    fish.localName,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 14,
@@ -483,7 +481,7 @@ class HomepageState extends State<Homepage> {
                     ),
                   ),
                   Text(
-                    fish.distance,
+                    fish.scientificName,
                     style: const TextStyle(color: Colors.white, fontSize: 12),
                   ),
                 ],
@@ -492,24 +490,6 @@ class HomepageState extends State<Homepage> {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildIndicator(List<Fish> fishList) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(fishList.length, (index) {
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          width: _currentIndex == index ? 10.0 : 6.0,
-          height: 6.0,
-          margin: const EdgeInsets.symmetric(horizontal: 3.0),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: _currentIndex == index ? Colors.blueGrey : Colors.grey,
-          ),
-        );
-      }),
     );
   }
 }
