@@ -806,7 +806,7 @@ Widget _buildSwellWaveHeightChart(MarineWeatherData? marineWeather) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Container(
-        height: 240,
+        height: 230,
         width: filteredTideHeights.length * 50,
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(

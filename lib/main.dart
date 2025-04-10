@@ -16,7 +16,7 @@ void main() async {
 // Create a permanent solve for this later (Prolly resource and permission check.)
 
 Future<void> _initializeAppWithRetry({
-  int maxRetries = 8,
+  int maxRetries = 6,
   int initialDelaySeconds = 1,
 }) async {
   int attempt = 0;
